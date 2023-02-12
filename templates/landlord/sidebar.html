@@ -1,0 +1,155 @@
+{% load static %}
+<!-- partial:partials/_sidebar.html -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+      <a class="sidebar-brand brand-logo" href="index.html"><img src="{% static 'assets/images/logo.svg' %}" alt="logo" /></a>
+      <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{% static 'assets/images/logo-mini.svg' %}" alt="logo" /></a>
+    </div>
+    <ul class="nav">
+      <li class="nav-item profile">
+        <div class="profile-desc">
+          <div class="profile-pic">
+            <div class="count-indicator">
+              <img class="img-xs rounded-circle " src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="">
+              <span class="count bg-success"></span>
+            </div>
+            <div class="profile-name">
+              <h5 class="mb-0 font-weight-normal">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+              <span>
+                {% if request.user.role == 'landlord' %}
+                  орендодавець
+                {% else %}
+                  орендар
+                {% endif %}
+              </span>
+            </div>
+          </div>
+          <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+          <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+            <a href="#" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-settings text-primary"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <p class="preview-subject ellipsis mb-1 text-small">Налаштування профілю</p>
+              </div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-onepassword  text-info"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <p class="preview-subject ellipsis mb-1 text-small">Змінити пароль</p>
+              </div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-calendar-today text-success"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item nav-category">
+        <span class="nav-link">Навігація</span>
+      </li>
+      
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="{% url 'dashboard-landlord' %}">
+          <span class="menu-icon">
+            <i class="mdi mdi-speedometer"></i>
+          </span>
+          <span class="menu-title">Головна</span>
+        </a>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic-re" aria-expanded="false" aria-controls="ui-basic-re">
+          <span class="menu-icon">
+            <i class="mdi mdi-home"></i>
+          </span>
+          <span class="menu-title">Нерухомість</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic-re">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-overview' %}">Перегляд</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-create' %}">Створити</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic-r" aria-expanded="false" aria-controls="ui-basic-r">
+          <span class="menu-icon">
+            <i class="mdi mdi-home"></i>
+          </span>
+          <span class="menu-title">Запити</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic-r">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-overview' %}">Перегляд</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-create' %}">Створити</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic-n" aria-expanded="false" aria-controls="ui-basic-n">
+          <span class="menu-icon">
+            <i class="mdi mdi-home"></i>
+          </span>
+          <span class="menu-title">Нотаток</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic-n">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-overview' %}">Перегляд</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-create' %}">Створити</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="{% url 'contracts-landlord' %}">
+          <span class="menu-icon">
+            <i class="mdi mdi-file-document"></i>
+          </span>
+          <span class="menu-title">Контракти</span>
+        </a>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="{% url 'contract-tenant' %}">
+          <span class="menu-icon">
+            <i class="mdi mdi-file-document"></i>
+          </span>
+          <span class="menu-title">Платежі</span>
+        </a>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="{% url 'contract-tenant' %}">
+          <span class="menu-icon">
+            <i class="mdi mdi-file-document"></i>
+          </span>
+          <span class="menu-title">Статистика</span>
+        </a>
+      </li>
+      
+    </ul>
+  </nav>
+  <!-- partial -->

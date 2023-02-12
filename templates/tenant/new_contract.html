@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+    <script>
+        const urls = {
+            "re_data_url": "{% url 'real-estate-get-by-token' %}"
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container-scroller">
+        {% include './sidebar.html' %}
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_navbar.html -->
+            {% include './navbar.html' %}
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+
+                    <div class="alert alert-danger new-contract-alert" role="alert"></div>
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">{{error}}</div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-12 col-xl-4 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Нерухомість</h4>
+
+                                    <div class="col text-center media-wrap active" id="media-no-data">
+                                        <h5>Інформація відсутня</h5>
+                                    </div>
+
+                                    <div class="media-wrap active" id="owl-carousel-basic-wrap">
+                                        <div class="owl-carousel owl-theme full-width owl-carousel-dash portfolio-carousel" id="owl-carousel-basic">
+                                        
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion media-wrap" id="accordionExample">
+
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                <b>Інформація</b>
+                                              </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                              <div class="accordion-body">
+                                                  <div class="preview-list" id="re_info">
+  
+                                                  </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        <div class="accordion-item">
+                                          <h2 class="accordion-header" id="headingTwo">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                              <b>Детальна інформація</b>
+                                            </button>
+                                          </h2>
+                                          <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <p id="re_description"></p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        
+                                      </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xl-8 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                        <div class="row justify-content-center py-5">
+                                            <div class="col-md-12 col-xl-6 text-center">
+                                                <div class="wrap-step active" id="token_step">
+                                                    <div class="form-group">
+                                                        <label>Вставте токен тут</label>
+                                                        <input type="text" id="token_input"
+                                                        value="14598cd6-e046-4a9d-8b4c-0ad934b0fa9d"
+                                                         class="form-control form-control-lg text-center" placeholder="14598cd6-e046-4a9d-8b4c-0ad934b0fa9d" 
+                                                        aria-label="Token">
+                                                    </div>
+                                                    <button type="button" id="token_get" class="btn btn-inverse-success btn-fw">Отримати</button>
+                                                </div>
+                                                <div class="wrap-step" id="enter_main_info_step">
+                                                    <div class="preview-list">
+                                
+                                                        <div class="preview-item border-bottom">
+                                                          <div class="preview-item-content d-flex flex-grow">
+                                                            <div class="flex-grow">
+                                                              <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                                                <h6 class="preview-subject text-small">Ціна за місяць</h6>
+                                                                <p class="text-warning text-small" id="new_contract_price_month"></p>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="preview-item border-bottom">
+                                                          <div class="preview-item-content d-flex flex-grow">
+                                                            <div class="flex-grow">
+                                                              <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                                                <h6 class="preview-subject text-small">Страховий внесок</h6>
+                                                                <p class="text-danger text-small" id="new_contract_price_security"></p>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <hr class="border border-success border-3 ">
+                                                        <h6 class="m-3">Додаткові орендатори</h6>
+                                                        <form action="" class="sub-tenants-wrap" method="post">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="action" value="create_contract">
+                                                            <input type="hidden" name="token" id="re_token_input" value="">
+                                                            <div class="sb">
+                                                                <div class="row my-3">
+                                                                    <div class="col-12">
+                                                                        <button type="button" id="add-subtenant" class="btn btn-inverse-primary btn-fw">Додати</button>
+                                                                    </div>
+                                                                </div>
+                                                                <hr class="border border-success border-3 ">
+                                                                <div class="row">
+                                                                    <div class="col justify-content-between">
+                                                                        <button type="button" id="re_cancel_contract" class="btn btn-secondary btn-lg mb-2">Відмінити</button>
+                                                                        <button type="submit" id="send_request" class="btn btn-primary btn-lg mb-2">Відправити запит</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
+                            bootstrapdash.com 2020</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+                                href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap
+                                admin templates</a> from Bootstrapdash.com</span>
+                    </div>
+                </footer>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- <script src="{% static 'assets/js/dashboard.js' %}"></script> -->
+    <script src="{% static 'assets/js/new_contract.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <!-- End custom js for this page -->
+</body>
+
+</html>

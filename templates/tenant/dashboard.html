@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      {% include './sidebar.html' %}
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        {% include './navbar.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            {% if not contract %}
+            <div class="banner">
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <h1 class="display-4 fw-bold">Привіт!</h1>
+                    <p>Ми раді вітати вас на нашому сайті. На разі у вас не має жодного активного контракту</p>
+                    <a href="{% url 'new-contract-tenant' %}" class="btn btn-outline-success">Створити контракт</a>
+                  </div>
+                  <div class="col-sm-7">
+                    <img class="img-fluid" src="{% static 'assets/images/dashboard/img_4.jpg' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% else %}
+
+            <div class="row">
+
+              <div class="col-xl-6 col-sm-12 col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+
+                    <div class="row">
+                      <div class="d-flex col-xl-7 col-sm-12 col-md-12">
+                        {% if contract.real_estate.real_estate_media.all.0 %}
+                            <div class="tn-dh-image-real-estate" style="background-image: url('{{ contract.real_estate.real_estate_media.all.0.file.url }}');"></div>
+                        {% else %}
+                            <div class="tn-dh-image-real-estate" style="background-image: url('{% static 'assets/images/dashboard/empty.png' %}');"></div>
+                        {% endif %}
+                        <div class="tn-dh-re-info ml-3">
+                          <a class="h2" href="">{{ contract.real_estate.title }}</a>
+                          <h5>UAN {{ contract.price_month }}</h5>
+                          <div class="dh-addition">
+                            {% if contract.real_estate.smokers_allowed %}
+                            <i class="mdi mdi-smoking text-primary" title="Smokers allowed"></i>
+                            {% endif %}
+                            {% if contract.real_estate.children_allowed %}
+                            <i class="mdi mdi-human-male-female text-success" title="Children allowed"></i>
+                            {% endif %}
+                            {% if contract.real_estate.students_allowed %}
+                            <i class="mdi mdi-school text-info" title="Students allowed"></i>
+                            {% endif %}
+                            {% if contract.real_estate.animals_allowed %}
+                            <i title="Animals allowed">
+                              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                width="20" height="20" viewBox="0 0 256 256" xml:space="preserve">
+    
+                                <defs>
+                                </defs>
+                                <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
+                                  transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+                                  <path
+                                    d="M 72.382 31.264 c 1.856 6.811 0.593 11.937 -2.656 18.595 c -3.053 9.014 -1.868 17.187 -0.555 24.498 c 0.319 1.774 1.862 3.063 3.664 3.063 h 0.069 c 1.369 0 2.467 1.098 2.467 2.453 v 5.351 H 25.396 c -11.124 0 -9.464 -25.734 0 -35.53 c 8.966 -9.132 27.893 -11.456 27.893 -28.723 c 0.284 -7.679 5.238 -14.278 14.345 -16.064 c 3.446 -0.551 6.939 0.658 9.307 3.223 l 2.838 3.074 c 0.643 0.696 1.547 1.093 2.495 1.093 h 3.785 c 1.802 0 3.18 1.605 2.909 3.386 l -0.799 5.244 c -0.198 1.297 -1.23 2.306 -2.53 2.474 l -7.608 0.986 C 74.957 25.035 71.384 28.16 72.382 31.264"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(235,163,75); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <path
+                                    d="M 18.84 79.787 C 11.678 81.018 3.346 70.875 1 63.555 C 2.26 78.724 9.964 85.223 25.396 85.223 L 18.84 79.787 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(235,163,75); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <path
+                                    d="M 75.37 86.223 H 25.396 c -3.228 0 -5.726 -1.865 -7.224 -5.395 c -3.665 -8.638 -0.383 -24.701 6.504 -31.83 c 3.033 -3.089 7.182 -5.435 11.194 -7.703 c 8.443 -4.773 16.418 -9.282 16.418 -20.325 c 0.323 -8.758 6.129 -15.275 15.152 -17.046 c 3.824 -0.611 7.634 0.709 10.233 3.526 l 2.838 3.074 c 0.452 0.49 1.094 0.771 1.761 0.771 h 3.785 c 1.15 0 2.24 0.5 2.989 1.374 c 0.75 0.873 1.081 2.025 0.907 3.163 l -0.8 5.244 c -0.263 1.727 -1.656 3.09 -3.39 3.315 l -7.607 0.986 c -1.701 0.363 -3.609 1.7 -4.459 3.164 c -0.487 0.841 -0.61 1.654 -0.365 2.417 c 0.005 0.014 0.009 0.028 0.013 0.042 c 1.992 7.31 0.449 12.786 -2.694 19.239 c -2.889 8.578 -1.884 16.219 -0.498 23.94 c 0.233 1.298 1.36 2.24 2.68 2.24 c 1.98 0 3.536 1.549 3.536 3.452 v 5.351 C 76.37 85.775 75.922 86.223 75.37 86.223 z M 69.289 5.774 c -0.497 0 -0.997 0.039 -1.497 0.119 c -8.029 1.576 -13.217 7.37 -13.504 15.114 c 0.001 12.173 -8.861 17.184 -17.432 22.029 c -4.071 2.302 -7.916 4.476 -10.746 7.357 c -6.865 7.106 -9.129 22.504 -6.096 29.653 c 1.176 2.771 2.987 4.176 5.382 4.176 H 74.37 v -4.351 c 0 -0.801 -0.658 -1.452 -1.467 -1.452 c -2.357 0 -4.313 -1.635 -4.718 -3.887 c -1.38 -7.687 -2.471 -15.948 0.593 -24.994 c 0.014 -0.041 0.03 -0.08 0.049 -0.118 c 3.031 -6.211 4.429 -11.128 2.596 -17.874 c -0.41 -1.3 -0.222 -2.686 0.547 -4.01 c 1.144 -1.972 3.495 -3.631 5.853 -4.131 l 7.686 -0.999 c 0.854 -0.111 1.541 -0.783 1.671 -1.633 l 0.8 -5.244 c 0.085 -0.56 -0.078 -1.128 -0.447 -1.558 c -0.369 -0.43 -0.906 -0.677 -1.473 -0.677 h -3.785 c -1.224 0 -2.4 -0.516 -3.23 -1.414 l -2.837 -3.074 C 74.404 6.855 71.896 5.774 69.289 5.774 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <path
+                                    d="M 68.094 86.223 c -3.105 0 -5.779 -2.212 -6.359 -5.261 c -0.657 -3.458 -3.841 -21.222 -1.908 -31.291 c 0.104 -0.542 0.633 -0.893 1.171 -0.794 c 0.542 0.104 0.897 0.629 0.794 1.171 c -1.446 7.532 0.124 21.159 1.908 30.541 c 0.4 2.105 2.249 3.634 4.395 3.634 c 0.553 0 1 0.447 1 1 C 69.094 85.775 68.647 86.223 68.094 86.223 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <path
+                                    d="M 48.78 86.223 c -0.553 0 -1 -0.447 -1 -1 v -4.861 c 0 -1.114 -0.793 -2.021 -1.767 -2.021 h -1.756 c -1.601 0 -3.021 -1.148 -3.452 -2.793 c -1.072 -4.088 -4.649 -7.528 -8.319 -8.004 c -0.548 -0.071 -0.934 -0.573 -0.863 -1.121 c 0.071 -0.548 0.577 -0.924 1.12 -0.863 c 4.505 0.584 8.709 4.571 9.997 9.481 c 0.201 0.766 0.825 1.301 1.518 1.301 h 1.756 c 2.077 0 3.767 1.804 3.767 4.022 v 4.861 C 49.78 85.775 49.332 86.223 48.78 86.223 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <path
+                                    d="M 63.244 28.798 c -1.373 0 -2.719 -0.355 -3.645 -1.091 c -2.808 -2.358 -6.431 -10.921 -4.066 -16.484 c 0.216 -0.509 0.806 -0.744 1.311 -0.529 c 0.509 0.216 0.746 0.803 0.529 1.312 c -1.887 4.441 1.185 12.215 3.491 14.153 c 1.232 0.976 4.28 0.792 5.414 -0.348 c 0.211 -0.212 0.706 -0.709 -0.22 -1.863 c -3.338 -5.093 -3.842 -8.628 -1.796 -12.279 c 0.268 -0.482 0.878 -0.655 1.36 -0.384 c 0.482 0.27 0.654 0.879 0.384 1.361 c -1.372 2.45 -1.614 5.11 1.669 10.129 c 1.223 1.517 1.252 3.209 0.021 4.447 C 66.664 28.257 64.934 28.798 63.244 28.798 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <path
+                                    d="M 25.396 86.223 c -16.045 0 -24.113 -7.177 -25.392 -22.584 c -0.042 -0.507 0.303 -0.965 0.801 -1.063 c 0.503 -0.104 0.992 0.191 1.147 0.675 c 2.255 7.033 10.282 16.67 16.718 15.552 c 0.541 -0.094 1.062 0.271 1.155 0.815 c 0.094 0.545 -0.271 1.062 -0.816 1.155 c -5.785 0.993 -11.988 -4.438 -15.852 -10.483 c 2.716 9.69 9.675 13.934 22.238 13.934 c 0.552 0 1 0.447 1 1 C 26.396 85.775 25.948 86.223 25.396 86.223 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                  <circle cx="73.106" cy="11.516" r="1.356"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                    transform="  matrix(1 0 0 1 0 0) " />
+                                </g>
+                              </svg>
+                            </i>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="mt-2 col-xl-4 col-sm-12 col-md-12 d-flex flex-column tn-dh-other">
+                        <div class="d-flex flex-column">
+                          <span class="fs-label-sm">Нерухомість створенно:</span>
+                          <div class="d-flex align-items-center"><i class="mdi mdi-calendar-clock text-primary"></i> <span class="fs-label-sm ml-1">{{ contract.real_estate.created }}</span></div>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <span class="fs-label-sm">Контракт створенно:</span>
+                          <div class="d-flex align-items-center"><i class="mdi mdi-calendar-clock text-primary"></i> <span class="fs-label-sm ml-1">{{ contract.created }}</span></div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-6 col-sm-12 col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="d-flex col-xl-7 col-sm-12 col-md-12">
+                        {% if contract.landlord.avatar %}
+                            <div class="tn-dh-image-real-estate" style="background-image: url('{{ contract.landlord.avatar.url }}');"></div>
+                        {% else %}
+                            <div class="tn-dh-image-real-estate" style="background-image: url('{% static 'assets/images/faces/face0.jpg' %}');"></div>
+                        {% endif %}
+                        <div class="tn-dh-re-info ml-3">
+                          <h3>{{ contract.landlord.first_name }} {{ contract.landlord.last_name }}</h3>
+                          <h5 class="d-flex align-items-center">
+                            <i class="mdi mdi-phone mr-2 icon-md text-info"></i> {{ contract.landlord.phone }}</h5>
+                          <h5 class="d-flex align-items-center">
+                            <i class="mdi mdi-gmail mr-2 icon-md text-danger"></i>{{ contract.landlord.email }}</h5>
+                        </div>
+                      </div>
+                      <div class=" col-xl-4 col-sm-12 col-md-12 d-flex flex-column tn-dh-other">
+                        <div class="d-flex flex-column">
+                          <span class="fs-label-sm">На сайті з:</span>
+                          <div class="d-flex align-items-center">
+                            <i class="mdi mdi-calendar-clock text-primary"></i> 
+                            <span class="fs-label-sm ml-1">{{ contract.landlord.date_joined }}</span>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <span class="fs-label-sm">Останній раз був:</span>
+                          <div class="d-flex align-items-center">
+                            <i class="mdi mdi-calendar-clock text-primary"></i> 
+                            <span class="fs-label-sm ml-1">{{ contract.landlord.last_login }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+
+                      <div class="col-xl-9 col-md-10 col">
+                        <button type="button" class="btn btn-outline-secondary btn-icon-text m-2"><i class="mdi mdi-auto-fix btn-icon-append"></i>  Створити запит</button>
+                        <button type="button" class="btn btn-outline-secondary btn-icon-text m-2"><i class="mdi mdi-chart-line btn-icon-append"></i>  Статистика</button>
+                      </div>
+
+                      <div class="col-xl-3 col-md-10 col">
+                        <button type="button" class="btn btn-outline-danger btn-icon-text m-2"><i class="mdi mdi-block-helper btn-icon-append"></i>  Розірвати угоду</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+              {% if transactions.count != 0 %}
+          
+              <div class="row ">
+                <div class="col-12 grid-margin">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Останні транзакції</h4>
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th> Номер транзакціЇ </th>
+                              <th> Кошти </th>
+                              <th> Дата </th>
+                              <th> Статус </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                              <td> {{ transaction.pk }} </td>
+                              <td> {{ transaction.amount }} </td>
+                              <td> {{ transaction.created }} </td>
+                              <td>
+                                {% if transaction.status == "success" %}
+                                <div class="btn btn-inverse-success btn-fw d-inline">Успішно</div>
+                                {% elif transaction.status == "pending" %}
+                                <div class="btn btn-inverse-warning btn-fw d-inline">Очікування</div>
+                                {% else %}
+                                <div class="btn btn-inverse-danger btn-fw d-inline">Невдача</div>
+                                {% endif %}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {% endif %}
+            
+            {% endif %}
+
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

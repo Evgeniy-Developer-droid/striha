@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      {% include './sidebar.html' %}
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        {% include './navbar.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            
+            {% if data %}
+              <div class="row">
+
+                <div class="col-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <h3>{{ data.title }}
+                          {% if data.status == "rented" %}
+                              <div class="badge badge-outline-success">Орендується</div>
+                          {% elif data.status == "not_rented" %}
+                              <div class="badge badge-outline-warning">Вільна</div>
+                          {% else %}
+                              <div class="badge badge-outline-danger">Не доступна</div>
+                          {% endif %}
+                        </h3>
+                        <h4>UAN <b>{{ data.price_month }}</b></h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="input-group-prepend mb-3">
+                      <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Дії</button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item text-light" href="{% url 'real-estate-update' data.pk %}">Оновити</a>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Видалити</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+
+                  <div class="col-md-6 col-xl-4 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Медіа</h4>
+
+                        <div class="owl-carousel owl-theme full-width owl-carousel-dash portfolio-carousel" id="owl-carousel-basic">
+                          {% for img in data.real_estate_media.all %}
+                          <div class="item">
+                            <img src="{{ img.file.url }}" alt="">
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <hr class="border border-primary border-3 opacity-50">
+                        <div class="mb-3"></div>
+                        <p class="text-light h6">{{ data.description }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-xl-4 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Інформація</h4>
+                        
+                        <div class="mb-3">
+
+                          <div class="preview-list">
+
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Тип</p>
+                                    {% if data.type_real_estate == "house" %}
+                                        <span class="text-primary"><i class="mdi mdi-home-variant"></i> <b>Дім</b></span>
+                                    {% elif data.type_real_estate == "appartment" %}
+                                        <span class="text-info"><i class="mdi mdi-home-modern"></i> <b>Квартира</b></span>
+                                    {% else %}
+                                        <span class="text-warning"><i class="mdi mdi-hotel"></i> <b>Кімната</b></span>
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Паління</p>
+                                    {% if data.smokers_allowed %}
+                                        <span class="text-success"><i class="mdi mdi-check-circle"></i></span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="mdi mdi-close-circle"></i></span>
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Діти</p>
+                                    {% if data.children_allowed %}
+                                        <span class="text-success"><i class="mdi mdi-check-circle"></i></span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="mdi mdi-close-circle"></i></span>
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Студенти</p>
+                                    {% if data.students_allowed %}
+                                        <span class="text-success"><i class="mdi mdi-check-circle"></i></span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="mdi mdi-close-circle"></i></span>
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Тварини</p>
+                                    {% if data.animals_allowed %}
+                                        <span class="text-success"><i class="mdi mdi-check-circle"></i></span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="mdi mdi-close-circle"></i></span>
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Кількість кімнат</p>
+                                    <span class="badge text-bg-light">{{ data.rooms }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Поверх</p>
+                                    <span class="badge text-bg-light">{{ data.floor }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="preview-item border-bottom">
+                              <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                  <div class="d-flex justify-content-between">
+                                    <p class="preview-subject">Кількість орендарів</p>
+                                    <span class="badge text-bg-light">{{ data.tenants }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12 col-xl-4 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Контракт</h4>
+                        {% if contract.status == "active" %}
+                          
+                          <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-pane" type="button" role="tab" aria-controls="general-tab-pane" aria-selected="true">Основне</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="tenant-tab" data-bs-toggle="tab" data-bs-target="#tenant-tab-pane" type="button" role="tab" aria-controls="tenant-tab-pane" aria-selected="false">Орендарі</button>
+                            </li>
+                          </ul>
+                          <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="general-tab-pane" role="tabpanel" aria-labelledby="general-tab" tabindex="0">
+                              <div class="preview-list">
+                                
+                                  <div class="preview-item border-bottom">
+                                    <div class="preview-item-content d-flex flex-grow">
+                                      <div class="flex-grow">
+                                        <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                          <h6 class="preview-subject text-small">Ціна за місяць</h6>
+                                          <p class="text-warning text-small">UAN {{ contract.price_month }}</p>
+                                        </div>
+                                        <!-- <div class="row">
+                                          <span class="text-light col-12 mb-2"><i class="mdi mdi-gmail text-danger mr-1"></i>{{subtenant.email}}</span>
+                                        </div> -->
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="preview-item border-bottom">
+                                    <div class="preview-item-content d-flex flex-grow">
+                                      <div class="flex-grow">
+                                        <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                          <h6 class="preview-subject text-small">Страховий внесок</h6>
+                                          <p class="text-danger text-small">UAN {{ contract.price_security }}</p>
+                                        </div>
+                                        <!-- <div class="row">
+                                          <span class="text-light col-12 mb-2"><i class="mdi mdi-gmail text-danger mr-1"></i>{{subtenant.email}}</span>
+                                        </div> -->
+                                      </div>
+                                    </div>
+                                  </div>
+                                
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="tenant-tab-pane" role="tabpanel" aria-labelledby="tenant-tab" tabindex="0">
+
+                              <h5>Основний орендар</h5>
+                              <div class="preview-list">
+
+                                <div class="preview-item">
+                                  <div class="preview-thumbnail">
+                                    <img src="{% if contract.tenant.avatar %}{{ contract.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="image" class="rounded-circle">
+                                  </div>
+                                  <div class="preview-item-content d-flex flex-grow">
+                                    <div class="flex-grow">
+                                      <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                        <h6 class="preview-subject">{{ contract.tenant.first_name }} {{ contract.tenant.last_name }}</h6>
+                                        <p class="text-muted text-small">орендар</p>
+                                      </div>
+                                      <div class="row">
+                                        <span class="text-light col-12 mb-2"><i class="mdi mdi-gmail text-danger mr-1"></i>{{contract.tenant.email}}</span>
+                                        <span class="text-light col-12"><i class="mdi mdi-phone text-primary mr-1"></i>{{contract.tenant.phone}}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                              <hr class="border border-success border-3 opacity-50">
+                              <h6>Додаткові орендарі</h6>
+                              <div class="preview-list">
+                                {% for subtenant in contract.other_contract_tenant.all %}
+                                  <div class="preview-item border-bottom">
+                                    <div class="preview-item-content d-flex flex-grow">
+                                      <div class="flex-grow">
+                                        <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                          <h6 class="preview-subject">{{ subtenant.first_name }} {{ subtenant.last_name }}</h6>
+                                          <p class="text-muted text-small">суборендар</p>
+                                        </div>
+                                        <div class="row">
+                                          <span class="text-light col-12 mb-2"><i class="mdi mdi-gmail text-danger mr-1"></i>{{subtenant.email}}</span>
+                                          <!-- <span class="text-light col-12"><i class="mdi mdi-phone text-primary mr-1"></i>{{subtenant.phone}}</span> -->
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+
+                            </div>
+                          </div>
+
+                        {% else %}
+                        <p class="text-muted h6">Немає активних контрактів</p>
+                        <hr class="border border-success border-3 opacity-50">
+                        <p class="text-light h5">Відправте цей токен орендарю для створення контракту</p>
+                        <div class="form-group">
+                          <div class="input-group">
+                            <input type="text" class="form-control text-dark" disabled value="{{ data.share_token }}" aria-label="Share token" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                              <button class="btn btn-sm btn-primary" type="button">Скопіювати</button>
+                            </div>
+                          </div>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+            {% endif %}
+
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title fs-5" id="exampleModalLabel">Ви впевнені?</h3>
+          </div>
+          <!-- <div class="modal-body">
+            <p class="text-light">Are you sure?</p>
+          </div> -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+            <a href="{% url 'real-estate-delete' data.pk %}" type="button" class="btn btn-danger">Видалити</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> -->
+    <!-- End custom js for this page -->
+  </body>
+</html>
