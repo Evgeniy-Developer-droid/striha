@@ -8,6 +8,35 @@ import json
 from user.mixins import LandlordContentOnlyMixin
 
 
+class TransactionSingleView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/transaction.html'
+
+    def get(self, request, key):
+        try:
+            queryset = Contract.objects.get(key=key, landlord=request.user)
+            return render(request, self.template_name, {
+                "title": "Overview Real Estate",
+                "data": queryset,
+            })
+        except Contract.DoesNotExist:
+            return render(request, self.template_name, {
+                "title": "Overview Real Estate"
+            })
+
+
+class TransactionsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/transactions.html'
+
+    def get(self, request):
+        queryset = Contract.objects.filter(landlord=request.user).order_by('-created')
+        return render(request, self.template_name, {
+            "title": "Overview Real Estate",
+            "contracts": queryset,
+        })
+
+
 class RealEstateContractDecline(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     login_url = reverse_lazy('login')
     template_name = 'landlord/RE_contracts.html'
@@ -44,9 +73,9 @@ class RealEstateDelete(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     login_url = reverse_lazy('login')
     template_name = 'landlord/RE_overview_single.html'
 
-    def get(self, request, pk):
+    def get(self, request, key):
         try:
-            instance = RealEstate.objects.get(landlord=request.user, pk=pk)
+            instance = RealEstate.objects.get(landlord=request.user, key=key)
             if instance.status != "not_rented":
                 return redirect(reverse("real-estate-overview")+"?error=You can't delete. You have open contract! Please terminate contract!")
             instance.delete()
@@ -59,9 +88,9 @@ class RealEstateUpdate(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     login_url = reverse_lazy('login')
     template_name = 'landlord/RE_update.html'
 
-    def get(self, request, pk):
+    def get(self, request, key):
         try:
-            instance = RealEstate.objects.get(landlord=request.user, pk=pk)
+            instance = RealEstate.objects.get(landlord=request.user, key=key)
             if instance.status != "not_rented":
                 return render(request, self.template_name, {"error": "You can`t update. You have open contract"})
             return render(request, self.template_name, {"data": instance})
@@ -105,9 +134,9 @@ class RealEstateContractSingle(LoginRequiredMixin, LandlordContentOnlyMixin, Vie
     login_url = reverse_lazy('login')
     template_name = 'landlord/RE_contract_single.html'
 
-    def get(self, request, pk):
+    def get(self, request, key):
         try:
-            queryset = Contract.objects.get(pk=pk, landlord=request.user)
+            queryset = Contract.objects.get(key=key, landlord=request.user)
             return render(request, self.template_name, {
                 "title": "Overview Real Estate",
                 "data": queryset,
@@ -126,7 +155,7 @@ class RealEstateContracts(LoginRequiredMixin, LandlordContentOnlyMixin, View):
         queryset = Contract.objects.filter(landlord=request.user).order_by('-created')
         return render(request, self.template_name, {
             "title": "Overview Real Estate",
-            "data": queryset,
+            "contracts": queryset,
         })
 
 
@@ -168,9 +197,9 @@ class RealEstateOverviewSingle(LoginRequiredMixin, LandlordContentOnlyMixin, Vie
     login_url = reverse_lazy('login')
     template_name = 'landlord/RE_overview_single.html'
 
-    def get(self, request, pk):
+    def get(self, request, key):
         try:
-            queryset = RealEstate.objects.get(landlord=request.user, pk=pk)
+            queryset = RealEstate.objects.get(landlord=request.user, key=key)
             contract = Contract.objects.filter(landlord=request.user, real_estate=queryset).order_by('-created')
             return render(request, self.template_name, {
                 "title": "Overview Real Estate",
@@ -190,7 +219,7 @@ class RealEstateOverview(LoginRequiredMixin, LandlordContentOnlyMixin, View):
         queryset = RealEstate.objects.filter(landlord=request.user)
         return render(request, self.template_name, {
             "title": "Overview Real Estate",
-            "data": queryset
+            "real_estates": queryset
         })
 
 
@@ -201,7 +230,12 @@ class Dashboard(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     def get(self, request):
         transactions = Transaction.objects.filter(landlord=request.user).order_by('-created')[:10]
         real_estate = RealEstate.objects.filter(landlord=request.user)
+        contracts = Contract.objects.filter(landlord=request.user, status="active")
         return render(request, self.template_name, {
             "real_estate": real_estate,
+            "real_estate_count": real_estate.count(),
+            "real_estate_not_rented": real_estate.filter(status="not_rented").count(),
+            "real_estate_rented": real_estate.filter(status="rented").count(),
+            "contracts": contracts.count(),
             "transactions": transactions
         })

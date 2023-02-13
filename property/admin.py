@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import RealEstate, Contract, RealEstateMedia, OtherContractTenant, Transaction
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ("name", "tenant", 
-    "landlord", "amount", "status")
+    list_display = ("key", "tenant", 
+    "landlord", "amount", "mode", "status")
     ordering = ('-created',)
 
 
@@ -16,7 +16,7 @@ class RealEstateMediaTabular(admin.TabularInline):
     extra = 1
 
 class RealEstateAdmin(admin.ModelAdmin):
-    list_display = ("title", )
+    list_display = ("key", "title", )
     fieldsets = (
         ("Real Estate Info", {"fields": (("title", "description",),)}),
         ("Other", {"fields": (
@@ -38,7 +38,7 @@ class OtherContractTenantTabular(admin.TabularInline):
     extra = 1
 
 class ContractAdmin(admin.ModelAdmin):
-    list_display = ("real_estate", "tenant", 
+    list_display = ("key", "real_estate", "tenant", 
     "landlord", "price_month", "price_security", "status")
     fieldsets = (
         ("Contract Info", {"fields": (("real_estate", "tenant", "landlord",), 

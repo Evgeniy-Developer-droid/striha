@@ -210,12 +210,12 @@
                 <div class="col-12 grid-margin">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title">Останні транзакції</h4>
+                      <h4 class="card-title">Останні платежі</h4>
                       <div class="table-responsive">
                         <table class="table">
                           <thead>
                             <tr>
-                              <th> Номер транзакціЇ </th>
+                              <th> Ключ </th>
                               <th> Кошти </th>
                               <th> Дата </th>
                               <th> Статус </th>
@@ -224,7 +224,7 @@
                           <tbody>
                             {% for transaction in transactions %}
                             <tr>
-                              <td> {{ transaction.pk }} </td>
+                              <td> {{ transaction.key }} </td>
                               <td> {{ transaction.amount }} </td>
                               <td> {{ transaction.created }} </td>
                               <td>

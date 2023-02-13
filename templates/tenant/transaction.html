@@ -32,69 +32,62 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-            {% if request.GET.success %}
-              <div class="alert alert-success" role="alert">
-                <div class="d-flex align-items-center"><i class="mdi mdi-emoticon-happy h3"></i>
-                  <h5>{{request.GET.success}}</h3>
-                </div>
-              </div>
-            {% endif %}
-            {% if request.GET.error %}
-              <div class="alert alert-danger" role="alert">
-                <div class="d-flex align-items-center"><i class="mdi mdi-emoticon-sad h3"></i>
-                  <h5>{{request.GET.error}}</h3>
-                </div>
-              </div>
-            {% endif %}
-
-            <div class="row ">
-                
-            {% for contract in contracts %}
-            <div class="col-lg-4 col-md-6 col-sm-12 grid-margin">
-              <div class="card single-card-hover-effect">
-                <div class="card-body">
-                  <a href="{% url 'single-contract-landlord' contract.key %}">{{contract.real_estate.title}}</a>
-                  <div class="row">
-
-                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                      <div class="d-flex d-sm-block d-md-flex align-items-center">
-                        <h5 class="mb-0 mr-1">
-                          UAN {{ contract.real_estate.price_month }}
-                        </h5>
-                        {% if contract.status == "active" %}
-                        <div class="badge badge-outline-success">Активний</div>
-                        {% elif contract.status == "pending_landlord" %}
-                        <div class="badge badge-outline-secondary">Очікує</div>
-                        {% elif contract.status == "terminated" %}
-                        <div class="badge badge-outline-info">Скасовано</div>
-                        {% else %}
-                        <div class="badge badge-outline-danger">Відмовлено</div>
-                        {% endif %}
-                      </div>
-                      <hr class="border border-primary border-3 opacity-75">
-                      <div class="dh-addition">
-                        <img class="img-xs rounded-circle" src="{% if contract.tenant.avatar %}{{ contract.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="">
-                        <span class="ml-2">{{contract.tenant.first_name}} {{contract.tenant.last_name}}</span>
+          
+              <div class="row ">
+                <div class="col-12 grid-margin">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Платежі</h4>
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th> Ключ </th>
+                              <th> Призначення </th>
+                              <th> Кошти </th>
+                              <th> Дата </th>
+                              <th> Статус </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                              <td> {{ transaction.key }} </td>
+                              <td>
+                                 {% if transaction.mode == "rent" %}
+                                 Оренда
+                                 {% elif transaction.mode == "internet" %}
+                                 Інтернет
+                                 {% elif transaction.mode == "gas" %}
+                                 Газопостачання
+                                 {% elif transaction.mode == "water" %}
+                                 Водопостачання
+                                 {% elif transaction.mode == "electricity" %}
+                                 Електроенергія
+                                 {% else %}
+                                 Інше
+                                 {% endif %}
+                              </td>
+                              <td> {{ transaction.amount }} </td>
+                              <td> {{ transaction.created }} </td>
+                              <td>
+                                {% if transaction.status == "success" %}
+                                <div class="btn btn-inverse-success btn-fw d-inline">Успішно</div>
+                                {% elif transaction.status == "pending" %}
+                                <div class="btn btn-inverse-warning btn-fw d-inline">Очікування</div>
+                                {% else %}
+                                <div class="btn btn-inverse-danger btn-fw d-inline">Невдача</div>
+                                {% endif %}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
-
-                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                      {% if contract.real_estate.real_estate_media.all.0 %}
-                      <div class="thumb-dash"
-                        style="background-image: url('{{ contract.real_estate.real_estate_media.all.0.file.url }}');"></div>
-                      {% else %}
-                      <div class="thumb-dash"
-                        style="background-image: url('{% static 'assets/images/dashboard/empty.png' %}');"></div>
-                      {% endif %}
-                    </div>
-
                   </div>
                 </div>
               </div>
-            </div>
-            {% endfor %}
-
-            </div>
 
           </div>
           <!-- content-wrapper ends -->

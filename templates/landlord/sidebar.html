@@ -69,7 +69,7 @@
       <li class="nav-item menu-items">
         <a class="nav-link" href="{% url 'dashboard-landlord' %}">
           <span class="menu-icon">
-            <i class="mdi mdi-speedometer"></i>
+            <i class="mdi mdi-home-variant"></i>
           </span>
           <span class="menu-title">Головна</span>
         </a>
@@ -92,38 +92,6 @@
       </li>
 
       <li class="nav-item menu-items">
-        <a class="nav-link" data-toggle="collapse" href="#ui-basic-r" aria-expanded="false" aria-controls="ui-basic-r">
-          <span class="menu-icon">
-            <i class="mdi mdi-home"></i>
-          </span>
-          <span class="menu-title">Запити</span>
-          <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse" id="ui-basic-r">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-overview' %}">Перегляд</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-create' %}">Створити</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <li class="nav-item menu-items">
-        <a class="nav-link" data-toggle="collapse" href="#ui-basic-n" aria-expanded="false" aria-controls="ui-basic-n">
-          <span class="menu-icon">
-            <i class="mdi mdi-home"></i>
-          </span>
-          <span class="menu-title">Нотаток</span>
-          <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse" id="ui-basic-n">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-overview' %}">Перегляд</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{% url 'real-estate-create' %}">Створити</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <li class="nav-item menu-items">
         <a class="nav-link" href="{% url 'contracts-landlord' %}">
           <span class="menu-icon">
             <i class="mdi mdi-file-document"></i>
@@ -133,18 +101,61 @@
       </li>
 
       <li class="nav-item menu-items">
-        <a class="nav-link" href="{% url 'contract-tenant' %}">
+        <a class="nav-link" href="{% url 'real-estate-transactions' %}">
           <span class="menu-icon">
-            <i class="mdi mdi-file-document"></i>
+            <i class="mdi mdi-currency-usd"></i>
           </span>
           <span class="menu-title">Платежі</span>
         </a>
       </li>
 
       <li class="nav-item menu-items">
-        <a class="nav-link" href="{% url 'contract-tenant' %}">
+        <a class="nav-link" href="">
           <span class="menu-icon">
-            <i class="mdi mdi-file-document"></i>
+            <i class="mdi mdi-speedometer"></i>
+          </span>
+          <span class="menu-title">Лічильники</span>
+        </a>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic-r" aria-expanded="false" aria-controls="ui-basic-r">
+          <span class="menu-icon">
+            <i class="mdi mdi-auto-fix"></i>
+          </span>
+          <span class="menu-title">Запити</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic-r">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="">Перегляд</a></li>
+            <li class="nav-item"> <a class="nav-link" href="">Створити</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic-n" aria-expanded="false" aria-controls="ui-basic-n">
+          <span class="menu-icon">
+            <i class="mdi mdi-bookmark-check"></i>
+          </span>
+          <span class="menu-title">Нотаток</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic-n">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="">Перегляд</a></li>
+            <li class="nav-item"> <a class="nav-link" href="">Створити</a></li>
+          </ul>
+        </div>
+      </li>
+
+      
+
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="">
+          <span class="menu-icon">
+            <i class="mdi mdi-chart-line"></i>
           </span>
           <span class="menu-title">Статистика</span>
         </a>

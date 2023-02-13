@@ -1,4 +1,19 @@
 
+
+.single-card-hover-effect:hover{
+  scale: 1.1;
+  z-index: 101;
+  transition: 0.5s;
+  box-shadow: 0 0 10px rgb(255, 238, 0);
+}
+
+.sidebar .nav .nav-item .menu-icon{
+  background: none !important;
+}
+.sidebar .nav .nav-item .menu-icon i{
+  font-size: 1.5rem !important;
+}
+
 .fs-label-sm{
   font-size: 11px;
 }

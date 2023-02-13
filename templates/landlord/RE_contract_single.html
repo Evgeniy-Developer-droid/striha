@@ -64,7 +64,7 @@
                           <div class="card-body">
                             <h4 class="card-title"><a class="h4 ml-3 position-relative" 
                               style="z-index: 99;"
-                              href="{% url 'real-estate-overview-single' data.real_estate.pk %}">{{ data.real_estate.title }}</a></h4>
+                              href="{% url 'real-estate-overview-single' data.real_estate.key %}">{{ data.real_estate.title }}</a></h4>
                             <div class="owl-carousel owl-theme full-width owl-carousel-dash portfolio-carousel" id="owl-carousel-basic">
                               {% for img in data.real_estate.real_estate_media.all %}
                               <div class="item">

@@ -9,6 +9,21 @@ from tenant.logic import create_contract
 from user.mixins import TenantContentOnlyMixin
 
 
+class TransactionsView(LoginRequiredMixin, TenantContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'tenant/transaction.html'
+
+    def get(self, request):
+        transactions = Transaction.objects.filter(tenant=request.user).order_by('-created')
+        contract = Contract.objects.filter(tenant=request.user).exclude(status__in=["terminated", "declined"]).order_by('-created')
+        if contract.exists():
+            contract = contract.first()
+        return render(request, self.template_name, {
+            "contract": contract,
+            "transactions": transactions
+        })
+
+
 class StepsContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
     login_url = reverse_lazy('login')
     template_name = 'tenant/steps_contract.html'
@@ -19,7 +34,8 @@ class StepsContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
         if contract.exists():
             contract = contract.first()
             if contract.status == "active":
-                return redirect(reverse("contract-tenant"))
+                # return redirect(reverse("contract-tenant"))
+                return redirect(reverse("dashboard-tenant"))
             return render(request, self.template_name, {"contract": contract})
         return redirect(reverse("new-contract-tenant"))
 
@@ -33,7 +49,8 @@ class NewContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
         if contract.exists():
             contract = contract.first()
             if contract.status == "active":
-                return redirect(reverse("contract-tenant"))
+                # return redirect(reverse("contract-tenant"))
+                return redirect(reverse("dashboard-tenant"))
             else:
                 return redirect(reverse("steps-contract-tenant"))
         return render(request, self.template_name, {})
@@ -46,19 +63,19 @@ class NewContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
             return render(request, self.template_name, {"error": res[1]})
 
 
-class ContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
-    login_url = reverse_lazy('login')
-    template_name = 'tenant/contract.html'
+# class ContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
+#     login_url = reverse_lazy('login')
+#     template_name = 'tenant/contract.html'
 
-    def get(self, request):
-        contract = Contract.objects.filter(tenant=request.user).exclude(status__in=["terminated", "declined"]).order_by('-created')
-        if contract.exists():
-            contract = contract.first()
-            if contract.status == "active":
-                return render(request, self.template_name, {})
-            else:
-                return redirect(reverse("steps-contract-tenant"))
-        return redirect(reverse("new-contract-tenant"))
+#     def get(self, request):
+#         contract = Contract.objects.filter(tenant=request.user).exclude(status__in=["terminated", "declined"]).order_by('-created')
+#         if contract.exists():
+#             contract = contract.first()
+#             if contract.status == "active":
+#                 return render(request, self.template_name, {})
+#             else:
+#                 return redirect(reverse("steps-contract-tenant"))
+#         return redirect(reverse("new-contract-tenant"))
 
 
 class Dashboard(LoginRequiredMixin, TenantContentOnlyMixin, View):

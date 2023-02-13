@@ -61,7 +61,7 @@
                     <div class="input-group-prepend mb-3">
                       <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Дії</button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item text-light" href="{% url 'real-estate-update' data.pk %}">Оновити</a>
+                        <a class="dropdown-item text-light" href="{% url 'real-estate-update' data.key %}">Оновити</a>
                         <div role="separator" class="dropdown-divider"></div>
                         <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Видалити</button>
                       </div>
@@ -355,7 +355,7 @@
           </div> -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-            <a href="{% url 'real-estate-delete' data.pk %}" type="button" class="btn btn-danger">Видалити</a>
+            <a href="{% url 'real-estate-delete' data.key %}" type="button" class="btn btn-danger">Видалити</a>
           </div>
         </div>
       </div>
