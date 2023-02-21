@@ -1,5 +1,27 @@
 from django.contrib import admin
-from .models import RealEstate, Contract, RealEstateMedia, OtherContractTenant, Transaction
+from .models import RealEstate, MeterPoint, Contract, RealEstateMedia, OtherContractTenant, Transaction, Request, RequestMedia
+
+
+class RequestMediaTabular(admin.TabularInline):
+    model = RequestMedia
+    extra = 1
+
+class RequestAdmin(admin.ModelAdmin):
+    list_display = ("key", "name",)
+    ordering = ('-created',)
+    inlines = [RequestMediaTabular]
+
+
+admin.site.register(Request, RequestAdmin)
+
+
+class MeterPointAdmin(admin.ModelAdmin):
+    list_display = ("key", "period_title",)
+    ordering = ('-created',)
+
+
+admin.site.register(MeterPoint, MeterPointAdmin)
+
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ("key", "tenant", 

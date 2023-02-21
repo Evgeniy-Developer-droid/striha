@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      {% include './sidebar.html' %}
+      <div class="container-fluid page-body-wrapper requests">
+        <!-- partial:partials/_navbar.html -->
+        {% include './navbar.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+
+            <div class="content-wrapper">
+
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Оберіть нерухомість</h4>
+                            <div class="overview-hidden-block">
+                                {% for real_estate in real_estates %}
+                                    <a href="" class="real_estate_rq">
+                                        <div class="d-flex">
+                                            {% if real_estate.real_estate_media.all.0 %}
+                                            <div class="thumb-dash"
+                                            style="background-image: url('{{ real_estate.real_estate_media.all.0.file.url }}');"></div>
+                                            {% else %}
+                                            <div class="thumb-dash"
+                                            style="background-image: url('{% static 'assets/images/dashboard/empty.png' %}');"></div>
+                                            {% endif %}
+                                            <p class="m-3"><b>{{ real_estate.title }}</b></p>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Всі запити</h4>
+                                <div class="d-flex flex-column">
+
+                                    <div class="accordion accordion-flush" id="accordion">
+
+                                        {% for req in requests %}
+                                        <div class="accordion-item">
+                                          <h2 class="accordion-header" id="flush-heading-{{ req.key }}">
+                                            <button class="accordion-button d-flex align-items-center collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ req.key }}" aria-expanded="false" aria-controls="flush-collapse-{{ req.key }}">
+                                                {% if not req.viewed and req.destination == request.user %}<span></span>{% endif %}
+                                                <p>{{req.name}}</p>
+                                            </button>
+                                          </h2>
+                                          <div id="flush-collapse-{{ req.key }}" class="accordion-collapse collapse" aria-labelledby="flush-heading-{{ req.key }}" data-bs-parent="#accordion">
+                                            <div class="accordion-body">
+                                                <div class="description">
+                                                    <h4><b>Описання:</b></h4>
+                                                    <p>{{req.description}}</p>
+                                                </div>
+                                                <div class="attachments d-flex flex-column">
+                                                    <h4><b>Медіа:</b></h4>
+                                                    <div class="row align-items-center flex-wrap">
+                                                        {% for attach in req.request_media.all %}
+                                                        <div class="attach" style="background-image: url('{{attach.file.url}}');">
+
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+
+                                                <div class="info">
+                                                    <h4><b>Додаткова інформація:</b></h4>
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            <span class="text-muted">Відправник:</span>
+                                                            <div class="profile-pic d-flex align-items-center p-2 m-2">
+                                                                <div class="count-indicator">
+                                                                    <img class="img-xs rounded-circle " src="{% if req.creator.avatar %}{{ req.creator.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="">
+                                                                </div>
+                                                                <div class="profile-name ml-1">
+                                                                    <p class="mb-0 font-weight-normal">{{ req.creator.first_name }} {{ req.creator.last_name }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            <span class="text-muted">Отримувач:</span>
+                                                            <div class="profile-pic d-flex align-items-center p-2 m-2">
+                                                                <div class="count-indicator">
+                                                                    <img class="img-xs rounded-circle " src="{% if req.destination.avatar %}{{ req.destination.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="">
+                                                                </div>
+                                                                <div class="profile-name ml-1">
+                                                                    <p class="mb-0 font-weight-normal">{{ req.destination.first_name }} {{ req.destination.last_name }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="created">
+                                                    <h4><b>Створено:</b></h4>
+                                                    <span class="text-primary">{{req.created}}</span>
+                                                </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                
+
+            </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+
+   
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

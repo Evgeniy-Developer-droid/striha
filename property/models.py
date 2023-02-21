@@ -76,6 +76,20 @@ class OtherContractTenant(models.Model):
 
 
 class MeterPoint(models.Model):
+    PERIOD_MONTH = (
+        ("january", "January",),
+        ("february", "February",),
+        ("march", "March",),
+        ("april", "April",),
+        ("may", "May",),
+        ("june", "June",),
+        ("july", "July",),
+        ("august", "August",),
+        ("september", "September",),
+        ("october", "October",),
+        ("november", "November",),
+        ("december", "December",),
+    )
     created = models.DateTimeField(auto_now_add=True)
     key = models.UUIDField(default=uuid.uuid4, editable=False)
     tenant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="meter_point_tenant")
@@ -83,7 +97,9 @@ class MeterPoint(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="meter_point_creator")
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True, related_name="meter_point_contract")
     real_estate = models.ForeignKey(RealEstate, on_delete=models.CASCADE, null=True, related_name="meter_point_real_estate")
-    period = models.CharField(max_length=255, default="")  # December, 2022
+    period_title = models.CharField(max_length=255, default="")  # december 2022
+    period_month = models.CharField(max_length=255, choices=PERIOD_MONTH, default="")  # december
+    period_year = models.CharField(max_length=255, default="")  # 2022
     image = models.ImageField(upload_to="meterpoints")
     name = models.CharField(max_length=255, default="")
     value = models.CharField(max_length=255, default="")
@@ -113,8 +129,8 @@ class Transaction(models.Model):
 
     sender_commission = models.IntegerField(default=0)
     status = models.CharField(max_length=255, choices=STATUS, default="pending")
-    order_id = models.CharField(default="", max_length=255)
-    liqpay_order_id = models.CharField(default="", max_length=255)
+    order_id = models.CharField(default="", max_length=255, blank="")
+    liqpay_order_id = models.CharField(default="", max_length=255, blank="")
 
     sender_card_type = models.CharField(max_length=255, default="", blank=True)
     payment_id = models.CharField(max_length=255, default="", blank=True)

@@ -1,10 +1,76 @@
 
+.attachments .attach{
+  width: 150px;
+  height: 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 5px;
+  cursor: pointer;
+}
+.accordion-button:focus{
+  box-shadow: none !important;
+  border: none !important;
+}
+.requests #accordion .accordion-item{
+  background-color: #000000;
+  border-radius: 8px;
+  margin: 5px 0;
+}
+.requests #accordion .accordion-button span{
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: #00ff6e;
+  margin: 0 3px;
+}
+.requests #accordion .accordion-button p{
+  margin: 0;
+}
 
+.overview-hidden-block .real_estate_rq{
+  min-width: 250px;
+  max-width: 250px;
+  height: 115px;
+  border-radius: 8px;
+  padding: 5px;
+  margin: 5px;
+  color: white;
+  text-decoration: none;
+  background-color: black;
+  cursor: pointer;
+  display: block;
+}
+.overview-hidden-block .real_estate_rq.active{
+  background-color: #d3d3d3;
+  color: black;
+}
+.overview-hidden-block .real_estate_rq:hover{
+  border: 2px #00ff6e solid;
+}
+
+.overview-hidden-block{
+  display: flex;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+
+.meter-item .card{
+  background-color: #000;
+}
+.meter-bg{
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 250px;
+}
 .single-card-hover-effect:hover{
-  scale: 1.1;
+  scale: 1.03;
   z-index: 101;
   transition: 0.5s;
-  box-shadow: 0 0 10px rgb(255, 238, 0);
+  box-shadow: 0 0 2em rgb(145, 145, 145);
 }
 
 .sidebar .nav .nav-item .menu-icon{

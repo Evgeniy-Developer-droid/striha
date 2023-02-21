@@ -1,11 +1,96 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
-from property.models import Contract, RealEstate, RealEstateMedia, Transaction
+from landlord.utils import get_ua_month_value
+from property.models import Contract, MeterPoint, RealEstate, RealEstateMedia, Transaction, Request
 import json
+from .forms import NewTransactionForm
 
 from user.mixins import LandlordContentOnlyMixin
+
+
+class RequestsAllView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/requests_all.html'
+
+    def get(self, request):
+        real_estates = RealEstate.objects.filter(landlord=request.user).order_by('-created')
+        contracts = Contract.objects.filter(landlord=request.user).order_by('-created')
+        requests = Request.objects.filter(contract__in=[item.pk for item in contracts]).order_by('-created')
+        return render(request, self.template_name, {
+            "title": "Overview Real Estate",
+            "real_estates": real_estates,
+            "requests": requests
+        })
+
+
+class MeterPointSingleView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/meterpoint.html'
+
+    def get(self, request, key):
+        try:
+            groups_meters = dict()
+            contract = Contract.objects.get(key=key, landlord=request.user)
+            queryset = MeterPoint.objects.filter(contract=contract).order_by('-created')
+
+            for item in queryset:
+                if item.period_month+item.period_year not in groups_meters:
+                    if len(groups_meters) >= 3:
+                        break
+                    groups_meters[item.period_month+item.period_year] = dict()
+                    groups_meters[item.period_month+item.period_year]['data'] = list()
+                    groups_meters[item.period_month+item.period_year]['title'] = item.period_title
+                groups_meters[item.period_month+item.period_year]['data'].append(item)
+            groups_meters = groups_meters.values()
+
+            return render(request, self.template_name, {
+                "title": "Overview Real Estate",
+                "groups_meters": groups_meters
+            })
+        except Contract.DoesNotExist:
+            return render(request, self.template_name, {
+                "title": "Overview Real Estate"
+            })
+        
+    def post(self, request, key):
+        try:
+            contract = Contract.objects.get(key=key, landlord=request.user)
+            # new meter point
+            today = datetime.date.today()
+            year = str(today.year)
+            MeterPoint.objects.create(
+                tenant=contract.tenant,
+                landlord=request.user,
+                creator=request.user,
+                contract=contract,
+                real_estate=contract.real_estate,
+                period_title=f"{get_ua_month_value(request.POST.get('period_month', 'N'))} {year}",
+                period_month=request.POST.get('period_month', "N"),
+                period_year=year,
+                image=request.FILES['image'],
+                name=request.POST.get('name', ""),
+                value=request.POST.get('value', ""),
+                other=request.POST.get('other', "")
+            )
+
+            return redirect(reverse("single-meterpoint-landlord", args=(key,))+"?success=")
+        except Contract.DoesNotExist:
+            return redirect(reverse("meterpoints-landlord")+"?error=")
+
+
+class MeterPointsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/meterpoints.html'
+
+    def get(self, request):
+        queryset = Contract.objects.filter(landlord=request.user).order_by('-created')
+        return render(request, self.template_name, {
+            "title": "Overview Real Estate",
+            "contracts": queryset,
+        })
 
 
 class TransactionSingleView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
@@ -14,15 +99,35 @@ class TransactionSingleView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
 
     def get(self, request, key):
         try:
-            queryset = Contract.objects.get(key=key, landlord=request.user)
+            contract = Contract.objects.get(key=key, landlord=request.user)
+            queryset = Transaction.objects.filter(contract=contract).order_by('-created')
             return render(request, self.template_name, {
                 "title": "Overview Real Estate",
-                "data": queryset,
+                "transactions": queryset
             })
         except Contract.DoesNotExist:
             return render(request, self.template_name, {
                 "title": "Overview Real Estate"
             })
+    
+    def post(self, request, key):
+        try:
+            contract = Contract.objects.get(key=key, landlord=request.user)
+
+            # new transaction
+            amount = request.POST.get('amount')
+            mode = request.POST.get('mode', 'other')
+            description = request.POST.get('description')
+            Transaction.objects.create(amount=amount, 
+                                        tenant=contract.tenant,
+                                        contract=contract,
+                                        landlord=request.user,
+                                        description=description, 
+                                        mode=mode)
+
+            return redirect(reverse("real-estate-transaction-single", args=(key,))+"?success=")
+        except Contract.DoesNotExist:
+            return redirect(reverse("real-estate-transactions")+"?error=")
 
 
 class TransactionsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
