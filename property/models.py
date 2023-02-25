@@ -158,7 +158,7 @@ class Request(models.Model):
 class RequestMedia(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     key = models.UUIDField(default=uuid.uuid4, editable=False)
-    request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name="request_media")
+    request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name="request_media", null=True)
     file = models.ImageField(upload_to='request_media', null=True, blank=True)
 
 

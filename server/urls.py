@@ -12,6 +12,7 @@ urlpatterns = [
     path('property/', include('property.urls')),
     path('landlord/', include('landlord.urls')),
     path('tenant/', include('tenant.urls')),
+    path('user/', include('user.urls'))
 ]
 
 if settings.DEBUG:

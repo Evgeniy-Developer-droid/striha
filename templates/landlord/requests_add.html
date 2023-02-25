@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+    <script>
+      const urls = {
+        "request_media_upload_url": '{% url "request-media-upload" %}',
+        "request_media_delete_url": '{% url "request-media-delete" %}'
+      }
+    </script>
+
+  </head>
+  <body>
+    <div class="container-scroller">
+      {% include './sidebar.html' %}
+      <div class="container-fluid page-body-wrapper requests-add">
+        <!-- partial:partials/_navbar.html -->
+        {% include './navbar.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+
+            <div class="content-wrapper">
+
+                <div class="row">
+
+                  <div class="col-md-6 col-lg-6 col-sm-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Медіа</h4>
+                        <div class="row">
+                      
+                          <div class="upload-card c-card">
+                            <input type="file" accept="image/*" class="input-upload" style="display: none;">
+                            <div class="logo upload-btn"><i class="mdi mdi-upload"></i></div></div>
+                          <!-- <div class="delete-upload-card c-card"><div class="logo delete-btn"><i class="mdi mdi-delete-forever"></i></div></div> -->
+                          <div class="add-upload-card c-card"><div class="logo" id="add-upload"><i class="mdi mdi-plus"></i></div></div>
+    
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-lg-6 col-sm-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Новий запит</h4>
+
+                        <form class="forms-sample" action="" method="post">
+                          {% csrf_token %}
+                          <input type="hidden" name="uploads" value="[]" id="uploads_array">
+
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group row">
+                                <div class="col">
+                                  <input type="text" class="form-control" placeholder="Назва" name="name">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group row">
+                                <div class="col">
+                                  <select class="form-control" name="contract">
+                                    <option value="">Оберіть контракт</option>
+                                    {% for contract in contracts %}
+                                      <option value="{{contract.key}}">{{contract.real_estate.title}}</option>
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+    
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group row">
+                                <div class="col">
+                                  <textarea class="form-control" placeholder="Додаткова інформація" name="description"
+                                  id="exampleTextarea1" rows="8"></textarea>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <hr class="border border-primary border-3 opacity-50">
+                          <button type="submit" class="btn btn-primary mr-2 btn-lg">Створити</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+            </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+
+   
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js-custom/requests.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

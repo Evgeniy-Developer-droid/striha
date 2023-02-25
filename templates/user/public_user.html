@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/user.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+  </head>
+  <body>
+    
+    <div class="container user-bg  mt-3">
+
+        <div class="row p-3">
+            <h1>{{user.first_name}} {{user.last_name}}</h1>
+        </div>
+
+        <div class="row p-3">
+
+            <div class="col-lg-3 col-md-3 sidebar-info p-2">
+                <div class="d-flex flex-column">
+                    <div class="d-flex mt-1 py-2 item-info align-items-center justify-content-between">
+                        <p>Активні контракти</p>
+                        <span class="info-number">{{summary.contracts_active}}</span>
+                    </div>
+                    <div class="d-flex mt-1 py-2 item-info align-items-center justify-content-between">
+                        <p>Всього контрактів</p>
+                        <span class="info-number">{{summary.contracts_all}}</span>
+                    </div>
+
+                    {% if user.role == 'landlord' %}
+                    <div class="d-flex mt-1 py-2 item-info align-items-center justify-content-between">
+                        <p>Кількість нерухомості</p>
+                        <span class="info-number">{{summary.real_estates}}</span>
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-9">
+
+                <section id="summary">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <p class="{% if user.is_active %}text-success{% else %}text-danger{% endif %}">
+                                        <b>{% if user.is_active %}Профіль активний{% else %}Профіль не активний{% endif %}</b>
+                                    </p>
+                                </div>
+                                <div class="col-lg-6 col-md-6"><p><i class="mdi mdi-email h5 mr-1 text-primary" ></i>{{user.email}}</p></div>
+                                <div class="col-lg-6 col-md-6"><p><i class="mdi mdi-cellphone-iphone h5 mr-1 text-primary" ></i>{{user.phone}}</p></div>
+                                <div class="col-lg-6 col-md-6"><p><i class="mdi mdi-human-handsdown h5 mr-1 text-primary" ></i>{% if user.role == "landlord" %}Орендодавець{% else %}Орендар{% endif %}</p></div>
+                                <div class="col-lg-6 col-md-6"><p><i class="mdi mdi-login h5 mr-1 text-primary" ></i>{{summary.last_login}}</p></div>
+                                <div class="col-lg-6 col-md-6"><p><i class="mdi mdi-clipboard-account h5 mr-1 text-primary" ></i>{{summary.joined}}</p></div>
+                                <div class="col-lg-6 col-md-6"><p><i class="mdi mdi-eye h5 mr-1 text-primary" ></i>{{user.views}} переглядів</p></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <div class="text-center">
+                                <span class="img-thumbnail" style="border: 0; background: none;">
+                                    <div class="avatar-container avatar-container-225">
+                                        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" 
+                                        class="vertical avatar-container avatar-container-225" width="225" height="225">
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="reviews">
+                    <div class="row reviews-title mb-3">
+                        <div class="col-12">
+                            <h4>Коментарі</h4>
+                        </div>
+                    </div>
+                    <div class="row new-review mb-5">
+                        <form class="forms-sample w-100" action="" method="post">
+                            {% csrf_token %}
+      
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="form-group row">
+                                  <div class="col-12">
+                                    <textarea class="form-control" placeholder="Коментар..." name="review"
+                                    id="exampleTextarea1" rows="8"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mr-2 btn-lg">Додати коментар</button>
+                        </form>
+                    </div>
+
+                    <div class="row reviews">
+                        {% if reviews %}
+                            {% for review in reviews %}
+                            <div class="col-12  mb-4">
+                                <div class="row">
+                                    <div class="col-12 mr-2">
+                                        <div class="avatar-review" 
+                                        style="background-image: url('{% if review.owner.avatar %}{{ review.owner.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}');"></div>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="{% url 'user-public' review.owner.key %}" class="h5 mb-2">{{review.owner.first_name}} {{review.owner.last_name}}</a>
+                                        <span class="date-review mb-2">{{ review.created }}</span>
+                                        <p class="mb-2">{{ review.body }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="my-4">Коментарів не має</p>
+                        {% endif %}
+                    </div>
+
+
+                </section>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

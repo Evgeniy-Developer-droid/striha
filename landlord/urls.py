@@ -16,6 +16,8 @@ urlpatterns = [
     path('real-estate/meterpoint/<str:key>', MeterPointSingleView.as_view(), name="single-meterpoint-landlord"),
 
     path('real-estate/requests', RequestsAllView.as_view(), name="requests-landlord"),
+    path('real-estate/requests/add', RequestsAddView.as_view(), name="add-requests-landlord"),
+    path('real-estate/requests/<str:key>', RequestsByRealEstateView.as_view(), name="requests-by-real-estate-landlord"),
 
     path('real-estate/contracts', RealEstateContracts.as_view(), name="contracts-landlord"),
     path('real-estate/contracts/<str:key>', RealEstateContractSingle.as_view(), name="single-contract-landlord"),

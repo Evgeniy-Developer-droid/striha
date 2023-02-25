@@ -4,16 +4,70 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from landlord.utils import get_ua_month_value
-from property.models import Contract, MeterPoint, RealEstate, RealEstateMedia, Transaction, Request
+from property.models import Contract, MeterPoint, RealEstate, RealEstateMedia, Transaction, Request, RequestMedia
 import json
 from .forms import NewTransactionForm
 
 from user.mixins import LandlordContentOnlyMixin
 
 
+class RequestsAddView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/requests_add.html'
+
+    def get(self, request):
+        contracts = Contract.objects.filter(landlord=request.user, status="active").order_by('-created')
+        return render(request, self.template_name, {
+            "title": "Overview Real Estate",
+            "contracts": contracts,
+        })
+
+    def post(self, request):
+        try:
+            contract = Contract.objects.get(key=request.POST.get('contract', "null"), landlord=request.user)
+            uploads_ids = json.loads(request.POST.get('uploads', '[]'))
+            instance = Request.objects.create(
+                contract=contract,
+                creator=request.user,
+                destination=contract.tenant,
+                description=request.POST.get("description", ""),
+                name=request.POST.get("name", "")
+            )
+            
+            if uploads_ids:
+                RequestMedia.objects.filter(
+                    pk__in=uploads_ids).update(request=instance)
+            return redirect(reverse("requests-landlord")+"?success=Запит створено.")
+        except Contract.DoesNotExist:
+            return redirect(reverse("requests-landlord")+"?error=Контракт не знайдено")
+
+
+class RequestsByRealEstateView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/requests.html'
+
+    def get(self, request, key):
+        target = RealEstate.objects.filter(landlord=request.user, key=key)
+        if target.exists():
+            target = target.first()
+            real_estates = RealEstate.objects.filter(landlord=request.user).exclude(key=key).order_by('-created')
+            real_estates = list(real_estates)
+            real_estates.insert(0,target)
+            contracts = Contract.objects.filter(landlord=request.user, real_estate=target).order_by('-created')
+            requests = Request.objects.filter(contract__in=[item.pk for item in contracts]).order_by('-created')
+            return render(request, self.template_name, {
+                "title": "Overview Real Estate",
+                "real_estates": real_estates,
+                "requests": requests,
+                "target": target
+            })
+        
+        return redirect(reverse("requests-landlord"))
+
+
 class RequestsAllView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     login_url = reverse_lazy('login')
-    template_name = 'landlord/requests_all.html'
+    template_name = 'landlord/requests.html'
 
     def get(self, request):
         real_estates = RealEstate.objects.filter(landlord=request.user).order_by('-created')

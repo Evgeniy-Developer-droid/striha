@@ -1,7 +1,14 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import User
+from .models import User, UserReview
 from django.contrib.auth.admin import UserAdmin
+
+
+class UserReviewAdmin(admin.ModelAdmin):
+    list_display = ("target", "owner", "key", "body", "created")
+
+
+admin.site.register(UserReview, UserReviewAdmin)
 
 
 class CustomUserAdmin(UserAdmin):

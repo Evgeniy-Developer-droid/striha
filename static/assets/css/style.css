@@ -1,4 +1,31 @@
 
+
+.message{
+  margin: 5px 0;
+  background-color: #404040;
+  border-radius: 5px;
+  padding: 15px;
+}
+.message-success{
+  border-left: 10px solid green;
+  border-right: 10px solid green;
+}
+.message-danger{
+  border-left: 10px solid red;
+  border-right: 10px solid red;
+}
+.message-info{
+  border-left: 10px solid blue;
+  border-right: 10px solid blue;
+}
+.message-warning{
+  border-left: 10px solid orange;
+  border-right: 10px solid orange;
+}
+.message p{
+  margin: 0;
+}
+
 .attachments .attach{
   width: 150px;
   height: 150px;
@@ -70,7 +97,7 @@
   scale: 1.03;
   z-index: 101;
   transition: 0.5s;
-  box-shadow: 0 0 2em rgb(145, 145, 145);
+  box-shadow: 0 0 3px rgb(145, 145, 145);
 }
 
 .sidebar .nav .nav-item .menu-icon{

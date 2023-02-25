@@ -1,0 +1,40 @@
+
+
+
+.reviews a{
+    text-decoration: none;
+}
+.date-review{
+    font-size: 13px;
+    color: #8d8d8d;
+}
+.avatar-review{
+    width: 50px;
+    height: 50px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+}
+.reviews-title{
+    border-bottom: 1px solid #444444;
+}
+.item-info{
+    border-bottom: 1px solid #444444;
+}
+.item-info p{
+    margin: 0;
+}
+.item-info .info-number{
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #004a66;
+    text-align: center;
+    padding: 3px 5px;
+    border-radius: 3px;
+}
+.user-bg{
+    background-color: #1e1e1e;
+    border: 1px solid #444444;
+    border-radius: 8px;
+}

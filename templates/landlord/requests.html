@@ -34,6 +34,27 @@
 
             <div class="content-wrapper">
 
+              {% if request.GET.success %}
+                <div class="message message-success" role="alert">
+                  <p>{{request.GET.success}}</p>
+                </div>
+              {% endif %}
+              {% if request.GET.error %}
+                <div class="message message-danger" role="alert">
+                  <p>{{request.GET.error}}</p>
+                </div>
+              {% endif %}
+              {% if request.GET.info %}
+                <div class="message message-info" role="alert">
+                  <p>{{request.GET.info}}</p>
+                </div>
+              {% endif %}
+              {% if request.GET.warning %}
+                <div class="message message-warning" role="alert">
+                  <p>{{request.GET.warning}}</p>
+                </div>
+              {% endif %}
+
                 <div class="row ">
                     <div class="col-12 grid-margin">
                       <div class="card">
@@ -41,7 +62,7 @@
                           <h4 class="card-title">Оберіть нерухомість</h4>
                             <div class="overview-hidden-block">
                                 {% for real_estate in real_estates %}
-                                    <a href="" class="real_estate_rq">
+                                    <a href="{% url 'requests-by-real-estate-landlord' real_estate.key %}" class="real_estate_rq {% if target.key == real_estate.key %}active{% endif %}">
                                         <div class="d-flex">
                                             {% if real_estate.real_estate_media.all.0 %}
                                             <div class="thumb-dash"
@@ -65,11 +86,12 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Всі запити</h4>
+                                <h4 class="card-title">{% if target %}Запити <span class="text-primary">{{target.title}}</span> {% else %}Всі запити{% endif %}</h4>
                                 <div class="d-flex flex-column">
 
                                     <div class="accordion accordion-flush" id="accordion">
 
+                                        {% if requests %}
                                         {% for req in requests %}
                                         <div class="accordion-item">
                                           <h2 class="accordion-header" id="flush-heading-{{ req.key }}">
@@ -131,6 +153,11 @@
                                           </div>
                                         </div>
                                         {% endfor %}
+                                        {% else %}
+                                        <div>
+                                          <p>Запитів не знайдено</p>
+                                        </div>
+                                        {% endif %}
 
                                     </div>
 

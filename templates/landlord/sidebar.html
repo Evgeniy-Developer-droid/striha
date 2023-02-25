@@ -26,14 +26,14 @@
           </div>
           <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
           <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-            <a href="#" class="dropdown-item preview-item">
+            <a href="{% url 'user-public' request.user.key %}" class="dropdown-item preview-item">
               <div class="preview-thumbnail">
                 <div class="preview-icon bg-dark rounded-circle">
                   <i class="mdi mdi-settings text-primary"></i>
                 </div>
               </div>
               <div class="preview-item-content">
-                <p class="preview-subject ellipsis mb-1 text-small">Налаштування профілю</p>
+                <p class="preview-subject ellipsis mb-1 text-small">Переглянути профіль</p>
               </div>
             </a>
             <div class="dropdown-divider"></div>
@@ -129,7 +129,7 @@
         <div class="collapse" id="ui-basic-r">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{% url 'requests-landlord' %}">Перегляд</a></li>
-            <li class="nav-item"> <a class="nav-link" href="">Створити</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{% url 'add-requests-landlord' %}">Створити</a></li>
           </ul>
         </div>
       </li>

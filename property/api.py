@@ -1,7 +1,33 @@
 from django.http import HttpResponseBadRequest, JsonResponse, Http404
-from .models import Contract, RealEstate, RealEstateMedia
+from .models import Contract, RealEstate, RealEstateMedia, RequestMedia
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
+
+
+@csrf_exempt
+def request_media_upload(request):
+    if not request.user.is_authenticated:
+        return HttpResponseBadRequest("Auth")
+    instance = RequestMedia.objects.create(
+        file=request.FILES['file']
+    )
+    return JsonResponse({
+        "id": instance.pk,
+        "file": instance.file.url
+    })
+
+
+@csrf_exempt
+def delete_request_media(request):
+    if not request.user.is_authenticated:
+        return HttpResponseBadRequest("Auth")
+    pk = request.POST.get('id', 0)
+    try:
+        instance = RequestMedia.objects.get(pk=pk, request__isnull=True)
+        instance.delete()
+        return JsonResponse({"message": "Видаленно"})
+    except RequestMedia.DoesNotExist:
+        return HttpResponseBadRequest("Не")
 
 
 @csrf_exempt
