@@ -9,20 +9,22 @@ urlpatterns = [
     path('real-estate/update/<str:key>', RealEstateUpdate.as_view(), name="real-estate-update"),
     path('real-estate/delete/<str:key>', RealEstateDelete.as_view(), name="real-estate-delete"),
 
-    path('real-estate/transactions', TransactionsView.as_view(), name="real-estate-transactions"),
-    path('real-estate/transaction/<str:key>', TransactionSingleView.as_view(), name="real-estate-transaction-single"),
+    path('transactions', TransactionsView.as_view(), name="real-estate-transactions"),
+    path('transaction/<str:key>', TransactionSingleView.as_view(), name="real-estate-transaction-single"),
 
-    path('real-estate/meterpoints', MeterPointsView.as_view(), name="meterpoints-landlord"),
-    path('real-estate/meterpoint/<str:key>', MeterPointSingleView.as_view(), name="single-meterpoint-landlord"),
+    path('settings', SettingsView.as_view(), name="settings-landlord"),
 
-    path('real-estate/requests', RequestsAllView.as_view(), name="requests-landlord"),
-    path('real-estate/requests/add', RequestsAddView.as_view(), name="add-requests-landlord"),
-    path('real-estate/requests/<str:key>', RequestsByRealEstateView.as_view(), name="requests-by-real-estate-landlord"),
+    path('meterpoints', MeterPointsView.as_view(), name="meterpoints-landlord"),
+    path('meterpoint/<str:key>', MeterPointSingleView.as_view(), name="single-meterpoint-landlord"),
 
-    path('real-estate/contracts', RealEstateContracts.as_view(), name="contracts-landlord"),
-    path('real-estate/contracts/<str:key>', RealEstateContractSingle.as_view(), name="single-contract-landlord"),
+    path('requests', RequestsAllView.as_view(), name="requests-landlord"),
+    path('requests/add', RequestsAddView.as_view(), name="add-requests-landlord"),
+    path('requests/<str:key>', RequestsByRealEstateView.as_view(), name="requests-by-real-estate-landlord"),
 
-    path('real-estate/contract/approve/<int:pk>', RealEstateContractApprove.as_view(), name="approve-contract-landlord"),
-    path('real-estate/contract/decline/<int:pk>', RealEstateContractDecline.as_view(), name="decline-contract-landlord"),
+    path('contracts', RealEstateContracts.as_view(), name="contracts-landlord"),
+    path('contracts/<str:key>', RealEstateContractSingle.as_view(), name="single-contract-landlord"),
+
+    path('contract/approve/<int:pk>', RealEstateContractApprove.as_view(), name="approve-contract-landlord"),
+    path('contract/decline/<int:pk>', RealEstateContractDecline.as_view(), name="decline-contract-landlord"),
 
 ]

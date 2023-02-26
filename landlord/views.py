@@ -6,9 +6,47 @@ from django.urls import reverse, reverse_lazy
 from landlord.utils import get_ua_month_value
 from property.models import Contract, MeterPoint, RealEstate, RealEstateMedia, Transaction, Request, RequestMedia
 import json
+
+from user.models import User
+from django.contrib.auth import update_session_auth_hash, authenticate
 from .forms import NewTransactionForm
 
 from user.mixins import LandlordContentOnlyMixin
+
+
+class SettingsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/settings.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {
+            "title": "Overview Real Estate"
+        })
+
+    def post(self, request):
+        user = User.objects.get(pk=request.user.pk)
+        data = request.POST
+        if data.get('action') == "summary":
+            user.first_name = data.get("first_name", user.first_name)
+            user.last_name = data.get("last_name", user.last_name)
+            user.phone = data.get("phone", user.phone)
+
+            user.save()
+            return redirect(reverse("settings-landlord")+"?success=Інформація оновлена")
+        if data.get('action') == "password":
+
+            #validation
+            user_check = authenticate(request, username=request.user.username, password=request.POST['old-pass'])
+            if user_check is None:
+                return redirect(reverse("settings-landlord")+"?error=Не правильний пароль")
+            if data.get("new-pass") != data.get("rep-pass"):
+                return redirect(reverse("settings-landlord")+"?error=Паролі не співпадають")
+
+            user.set_password(data.get("new-pass"))
+            user.save()
+            update_session_auth_hash(request, user)
+            return redirect(reverse("settings-landlord")+"?success=Пароль успішно змінено")
+        return redirect(reverse("settings-landlord")+"?error=Виникла помилка")
 
 
 class RequestsAddView(LoginRequiredMixin, LandlordContentOnlyMixin, View):

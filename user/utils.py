@@ -18,14 +18,14 @@ def get_summary(user):
 
         if action == "login":
             if years >= 1:
-                return f"в онлайн був {int(years)} років тому"
+                return f"останій вхід {int(years)} років тому"
             if months >= 1:
-                return f"в онлайн був {int(months)} місяців тому"
+                return f"останій вхід {int(months)} місяців тому"
             if days >= 1:
-                return f"в онлайн був {int(days)} днів тому"
+                return f"останій вхід {int(days)} днів тому"
             if hours >= 1:
-                return f"в онлайн був {int(hours)} годин тому"
-            return "в онлайн був недавно"
+                return f"останій вхід {int(hours)} годин тому"
+            return "останій вхід недавно"
         else:
             if years >= 1:
                 return f"на сервісі {int(years)} роки"

@@ -86,7 +86,14 @@
                                   <select class="form-control" name="contract">
                                     <option value="">Оберіть контракт</option>
                                     {% for contract in contracts %}
-                                      <option value="{{contract.key}}">{{contract.real_estate.title}}</option>
+                                      <option value="{{contract.key}}">
+                                        {% if contract.real_estate.real_estate_media.all.0 %}
+                                        <img src="{{ contract.real_estate.real_estate_media.all.0.file.url }}" alt="" width="50px" height="50px">
+                                        {% else %}
+                                        <img src="{% static 'assets/images/dashboard/empty.png' %}" alt="" width="50px" height="50px">
+                                        {% endif %}
+                                        <p>{{contract.real_estate.title}}</p>
+                                      </option>
                                     {% endfor %}
                                   </select>
                                 </div>

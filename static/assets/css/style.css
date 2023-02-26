@@ -1,5 +1,14 @@
 
 
+.image-avatar-change{
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .message{
   margin: 5px 0;
   background-color: #404040;

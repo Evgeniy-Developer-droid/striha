@@ -29,3 +29,18 @@ class UserPublicView(LoginRequiredMixin, View):
             })
         except User.DoesNotExist:
             return HttpResponseBadRequest("Not found")
+    
+
+    def post(self, request, key):
+        try:
+            user = User.objects.get(key=key)
+            if user == request.user:
+                return redirect(reverse('user-public', args=(key,))+"?warning=Ви не можете додати коментар.")
+            UserReview.objects.create(
+                owner=request.user,
+                target=user,
+                body=request.POST.get("review", "")
+            )
+            return redirect(reverse('user-public', args=(key,))+"?success=Коментар успішно додано.")
+        except User.DoesNotExist:
+            return HttpResponseBadRequest("Not found")

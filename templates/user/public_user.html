@@ -93,7 +93,28 @@
                             <h4>Коментарі</h4>
                         </div>
                     </div>
+                    {% if request.GET.success %}
+                    <div class="message message-success" role="alert">
+                        <p>{{request.GET.success}}</p>
+                    </div>
+                    {% endif %}
+                    {% if request.GET.error %}
+                    <div class="message message-danger" role="alert">
+                        <p>{{request.GET.error}}</p>
+                    </div>
+                    {% endif %}
+                    {% if request.GET.info %}
+                    <div class="message message-info" role="alert">
+                        <p>{{request.GET.info}}</p>
+                    </div>
+                    {% endif %}
+                    {% if request.GET.warning %}
+                    <div class="message message-warning" role="alert">
+                        <p>{{request.GET.warning}}</p>
+                    </div>
+                    {% endif %}
                     <div class="row new-review mb-5">
+                        
                         <form class="forms-sample w-100" action="" method="post">
                             {% csrf_token %}
       
@@ -102,7 +123,7 @@
                                 <div class="form-group row">
                                   <div class="col-12">
                                     <textarea class="form-control" placeholder="Коментар..." name="review"
-                                    id="exampleTextarea1" rows="8"></textarea>
+                                    id="exampleTextarea1" rows="8" required></textarea>
                                   </div>
                                 </div>
                               </div>
