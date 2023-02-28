@@ -23,6 +23,12 @@
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+
+  <script>
+    const urls = {
+      "change_avatar_url": "{% url 'change-avatar' %}"
+    }
+  </script>
 </head>
 
 <body>
@@ -157,6 +163,8 @@
   <!-- endinject -->
   <!-- Custom js for this page -->
   <script src="{% static 'assets/js/dashboard.js' %}"></script>
+  <script src="{% static 'assets/js-custom/settings.js' %}"></script>
+  <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
   <!-- End custom js for this page -->
 </body>
 

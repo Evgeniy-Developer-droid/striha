@@ -28,3 +28,4 @@ urlpatterns = [
     path('contract/decline/<int:pk>', RealEstateContractDecline.as_view(), name="decline-contract-landlord"),
 
 ]
+
