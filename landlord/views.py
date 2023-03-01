@@ -7,11 +7,40 @@ from landlord.utils import get_ua_month_value
 from property.models import Contract, MeterPoint, RealEstate, RealEstateMedia, Transaction, Request, RequestMedia
 import json
 
-from user.models import User
+from user.models import Notification, User
 from django.contrib.auth import update_session_auth_hash, authenticate
 from .forms import NewTransactionForm
 
 from user.mixins import LandlordContentOnlyMixin
+
+
+class NotificationsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+    template_name = 'landlord/notifications.html'
+
+    def get(self, request):
+        new_notify = True
+        not_viewed_ids = []
+        print(request.GET.get('all'))
+        if int(request.GET.get('all', 0)) == 1:
+            instances = Notification.objects.filter(target=request.user).order_by('-created')
+            new_notify = False
+        else:
+            instances = Notification.objects.filter(target=request.user, viewed=False).order_by('-created')
+            not_viewed_ids = [str(item.key) for item in instances]
+        not_viewed_ids = json.dumps(not_viewed_ids)
+        return render(request, self.template_name, {
+            "title": "Overview Real Estate",
+            "data": instances,
+            "new_notify": new_notify,
+            "not_viewed_ids": not_viewed_ids
+        })
+    
+    def post(self, request):
+        ids = json.loads(request.POST.get("n", "[]"))
+        instances = Notification.objects.filter(target=request.user, key__in=ids)
+        instances.update(viewed=True)
+        return redirect(reverse("notifications-landlord"))
 
 
 class SettingsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):

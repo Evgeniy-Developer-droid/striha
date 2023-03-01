@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
         })
         .then((response) => response.json())
         .then((data) => {
-            if(data.length >= 0){
+            if(data.length > 0){
                 $('#notificationDropdown').html('<i class="mdi mdi-bell"></i><span class="count bg-danger"></span>')
             }else{
                 $('#notificationDropdown').html('<i class="mdi mdi-bell"></i>')

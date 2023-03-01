@@ -21,6 +21,8 @@ urlpatterns = [
     path('requests/add', RequestsAddView.as_view(), name="add-requests-landlord"),
     path('requests/<str:key>', RequestsByRealEstateView.as_view(), name="requests-by-real-estate-landlord"),
 
+    path('notifications', NotificationsView.as_view(), name="notifications-landlord"),
+
     path('contracts', RealEstateContracts.as_view(), name="contracts-landlord"),
     path('contracts/<str:key>', RealEstateContractSingle.as_view(), name="single-contract-landlord"),
 

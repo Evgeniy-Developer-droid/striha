@@ -1,5 +1,21 @@
 
 
+.n-item.new{
+  background-color: rgba(154, 235, 134, 0.2);
+}
+.n-item .preview-icon{
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.n-item{
+  background-color: rgba(228, 234, 236, 0.2);
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 8px;
+}
 .image-avatar-change{
   width: 200px;
   height: 200px;
