@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -5,9 +6,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-m@3gz(yk&9)%-%dcn!sobc-o*9u_=6-(&a_mf3wr&np(lunr_p'
 
-DEBUG = True
+DEBUG = bool(int(os.environ.get("DEBUG", 1)))
+USE_SQL_FILE_DATABASE = bool(int(os.environ.get("USE_SQL_FILE_DATABASE", 0)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -64,6 +66,16 @@ DATABASES = {
     }
 }
 
+if not USE_SQL_FILE_DATABASE:
+    DATABASES['default'] = {
+        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('SQL_DATABASE', BASE_DIR / "db.sqlite3"),
+        'USER': os.environ.get('SQL_USER', 'user'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
+        'HOST': os.environ.get('SQL_HOST', 'localhost'),
+        'PORT': os.environ.get('SQL_PORT', "5432")
+    }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -91,15 +103,15 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-# STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'static'
+# STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LIQPAY_SECRET = "sandbox_E82KCJEI4pggA7ROMmh1rx0lXqMkP9rDDXF4slIW"
-LIQPAY_PUBLIC = "sandbox_i2084645664"
+LIQPAY_SECRET = os.environ.get('LIQPAY_SECRET')
+LIQPAY_PUBLIC = os.environ.get('LIQPAY_PUBLIC')
 
-SITE_URL = "http://127.0.0.1:8000"
+SITE_URL = os.environ.get('SITE_URL')
