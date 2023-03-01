@@ -13,6 +13,15 @@ from .forms import NewTransactionForm
 
 from user.mixins import LandlordContentOnlyMixin
 
+# class StatisticView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+#     login_url = reverse_lazy('login')
+#     template_name = 'landlord/statistics.html'
+
+#     def get(self, request):
+#         return render(request, self.template_name, {
+#             "title": "Overview Real Estate",
+#         })
+
 
 class NotificationsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     login_url = reverse_lazy('login')
@@ -323,11 +332,11 @@ class RealEstateUpdate(LoginRequiredMixin, LandlordContentOnlyMixin, View):
         except RealEstate.DoesNotExist:
             return render(request, self.template_name, {"error": "Not access"})
 
-    def post(self, request, pk):
+    def post(self, request, key):
         data = request.POST
         try:
             uploads_ids = json.loads(data.get('uploads', '[]'))
-            instance = RealEstate.objects.get(landlord=request.user, pk=pk)
+            instance = RealEstate.objects.get(landlord=request.user, key=key)
             
             if instance.status != "not_rented":
                 return render(request, self.template_name, {"error": "You can`t update. You have open contract"})
@@ -436,6 +445,7 @@ class RealEstateOverviewSingle(LoginRequiredMixin, LandlordContentOnlyMixin, Vie
             return render(request, self.template_name, {
                 "title": "Overview Real Estate"
             })
+
 
 class RealEstateOverview(LoginRequiredMixin, LandlordContentOnlyMixin, View):
     login_url = reverse_lazy('login')

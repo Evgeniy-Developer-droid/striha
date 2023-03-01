@@ -22,6 +22,21 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+    <script>
+
+      function copyFunction() {
+        // Get the text field
+        var copyText = document.getElementById("share-token");
+      
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+      
+         // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+      }
+
+    </script>
   </head>
   <body>
     <div class="container-scroller">
@@ -313,9 +328,9 @@
                         <p class="text-light h5">Відправте цей токен орендарю для створення контракту</p>
                         <div class="form-group">
                           <div class="input-group">
-                            <input type="text" class="form-control text-dark" disabled value="{{ data.share_token }}" aria-label="Share token" aria-describedby="basic-addon2">
+                            <input type="text" id="share-token" class="form-control text-dark" disabled value="{{ data.share_token }}" aria-label="Share token" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                              <button class="btn btn-sm btn-primary" type="button">Скопіювати</button>
+                              <button class="btn btn-sm btn-primary" onclick="copyFunction()" type="button">Скопіювати</button>
                             </div>
                           </div>
                         </div>
