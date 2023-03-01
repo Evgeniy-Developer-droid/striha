@@ -57,33 +57,33 @@ services:
   #     - ./data/certbot/conf:/etc/letsencrypt
   #     - ./data/certbot/www:/var/www/certbot
 
-  redis:
-    image: redis
-    restart: always
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis
+  #   restart: always
+  #   volumes:
+  #     - ./redis.conf:/usr/local/etc/redis/redis.conf
+  #   ports:
+  #     - 6379:6379
 
-  celery:
-    build: .
-    command: celery -A server worker -l info
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-    env_file:
-      - ./.env
+  # celery:
+  #   build: .
+  #   command: celery -A server worker -l info
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - redis
+  #   env_file:
+  #     - ./.env
       
-  celery_beat:
-    build: .
-    command: celery -A server beat -l info
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-    env_file:
-      - ./.env
+  # celery_beat:
+  #   build: .
+  #   command: celery -A server beat -l info
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - redis
+  #   env_file:
+  #     - ./.env
 
   nginx:
     build: ./nginx
