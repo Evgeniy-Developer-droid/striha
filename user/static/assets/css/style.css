@@ -1,5 +1,52 @@
 
 
+/* payment */
+.close-btn-pay{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 25px;
+  cursor: pointer;
+}
+.payment-wrap .desc{
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(161, 161, 161);
+}
+.payment-wrap{
+  padding: 40px !important;
+  position: relative;
+  background-color: rgb(24, 24, 24);
+  min-height: 300px;
+  border-radius: 8px;
+  border: 1px solid rgb(129, 129, 129);
+}
+.payment-preview{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.527);
+  z-index: 9999999;
+}
+
+/* end payment */
+
+
+.copied{
+  top: 50%;
+  border-radius: 8px;
+  text-align: center;
+  background: rgb(36, 36, 36);
+  padding: 2vw;
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
 .n-item.new{
   background-color: rgba(154, 235, 134, 0.2);
 }
