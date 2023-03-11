@@ -1,7 +1,7 @@
 from django.urls import path
 
 from property.api import delete_real_estate_media, get_contract_status_tenant, \
-    upload_real_estate_media, get_real_estate_by_token, request_media_upload, delete_request_media
+    upload_real_estate_media, get_real_estate_by_token, request_media_upload, delete_request_media, payment_single_data
 
 urlpatterns = [
 
@@ -15,4 +15,5 @@ urlpatterns = [
 
     path('real-estate/request/media/upload', request_media_upload, name="request-media-upload"),
     path('real-estate/request/media/delete', delete_request_media, name="request-media-delete"),
+    path('real-estate/payment/single/get', payment_single_data, name="payment-single-get"),
 ]

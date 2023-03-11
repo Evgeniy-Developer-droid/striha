@@ -46,3 +46,29 @@ class Notification(models.Model):
     body = models.CharField(max_length=500, default="", null=True, blank=True)
     meta_name = models.CharField(max_length=500, choices=META_NAME, default="other")
 
+
+class P2PCredit(models.Model):
+    STATUS = (
+        ('pending', "Pending",),
+        ('success', "Success",),
+        ('failure', "Failure",),
+        ('error', "Error",),
+    )
+    created = models.DateTimeField(auto_now_add=True)
+    key = models.UUIDField(default=uuid.uuid4, editable=False)
+    amount = models.IntegerField(default=0)
+    currency = models.CharField(max_length=10, default="UAN")
+    order_id = models.CharField(max_length=255, default="")
+    card = models.CharField(max_length=255, default="**** **** **** 0000")
+    status = models.CharField(max_length=255, choices=STATUS, default="pending")
+    landlord = models.ForeignKey(User, on_delete=models.CASCADE, related_name="p2p_credit_user")
+
+    payment_id = models.CharField(max_length=255, default="unknown")
+    acq_id = models.CharField(max_length=255, default="unknown")
+    liqpay_order_id = models.CharField(max_length=255, default="unknown")
+    transaction_id = models.CharField(max_length=255, default="unknown")
+
+    meta = models.TextField(default="{}", blank=True)
+
+    description = models.TextField(default="", blank=True)
+    # https://www.liqpay.ua/documentation/api/p2p_credit/doc

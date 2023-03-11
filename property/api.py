@@ -1,7 +1,49 @@
 from django.http import HttpResponseBadRequest, JsonResponse, Http404
-from .models import Contract, RealEstate, RealEstateMedia, RequestMedia
+from .models import Contract, RealEstate, RealEstateMedia, RequestMedia, Transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
+
+
+@csrf_exempt
+def payment_single_data(request):
+    result = dict()
+    mode = {
+        "rent": "Місячна оплата", "internet": "Інтернет",
+        "gas": "Газопостачання", "water": "Водопостачання",
+        "electricity": "Електроенергія", "other": "Інше",
+    }
+    if not request.user.is_authenticated:
+        return HttpResponseBadRequest("Auth")
+    if request.user.role == 'landlord':
+        instance = Transaction.objects.get(key=request.GET.get("key", "000"), landlord=request.user)
+        result['avatar'] = instance.tenant.avatar.url if instance.tenant.avatar else "/static/assets/images/faces/face0.jpg"
+        result['role'] = "Орендар"
+        result['email'] = instance.tenant.email
+        result['full_name'] = f'{instance.tenant.first_name} {instance.tenant.last_name}'
+    else:
+        instance = Transaction.objects.get(key=request.GET.get("key", "000"), tenant=request.user)
+        result['avatar'] = instance.landlord.avatar.url if instance.landlord.avatar else "/static/assets/images/faces/face0.jpg"
+        result['role'] = "Орендодавець"
+        result['email'] = instance.landlord.email
+        result['full_name'] = f'{instance.landlord.first_name} {instance.landlord.last_name}'
+    result['amount'] = instance.amount
+    result['card'] = instance.card_mask
+    result['created'] = instance.created.strftime("%d/%m/%Y, %H:%M:%S")
+    result['description'] = instance.description
+    result['mode'] = mode.get(instance.mode, "Інше")
+
+    if instance.sender_card_type == "visa":
+        result['sender_card_type_svg'] = "/static/assets/images/visa-svgrepo-com.svg"
+    else:
+        result['sender_card_type_svg'] = "/static/assets/images/mastercard-svgrepo-com.svg"
+
+    if instance.status == "success":
+        result['status'] = "Успішно"
+    elif instance.status == "failed":
+        result['status'] = "Невдача"
+    else:
+        result['status'] = "Очікування"
+    return JsonResponse(result)
 
 
 @csrf_exempt

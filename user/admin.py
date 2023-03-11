@@ -1,7 +1,16 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import User, UserReview, Notification
+from .models import User, UserReview, Notification, P2PCredit
 from django.contrib.auth.admin import UserAdmin
+
+
+class P2PCreditAdmin(admin.ModelAdmin):
+    list_display = ("key", "amount", "currency", "card", "status", "created")
+    search_fields = ('key',)
+    
+
+
+admin.site.register(P2PCredit, P2PCreditAdmin)
 
 
 class NotificationAdmin(admin.ModelAdmin):

@@ -174,11 +174,11 @@
                         <td> {{ transaction.created }} </td>
                         <td>
                           {% if transaction.status == "success" %}
-                          <div class="btn btn-inverse-success btn-fw d-inline pay-btn-info">Успішно</div>
+                          <div class="btn btn-inverse-success btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Успішно</div>
                           {% elif transaction.status == "pending" %}
-                          <div class="btn btn-inverse-warning btn-fw d-inline pay-btn-info">Очікування</div>
+                          <div class="btn btn-inverse-warning btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Очікування</div>
                           {% else %}
-                          <div class="btn btn-inverse-danger btn-fw d-inline pay-btn-info">Невдача</div>
+                          <div class="btn btn-inverse-danger btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Невдача</div>
                           {% endif %}
                         </td>
                       </tr>
@@ -213,6 +213,8 @@
   </div>
 
 
+  <!-- payment modal -->
+  <script>const url_get_payment_data = "{% url 'payment-single-get' %}";</script>
   <div class="payment-preview" style="display: none;">
 
     <div class="container">
@@ -223,55 +225,17 @@
           <div class="row">
             <h3>Деталі платежу</h3>
           </div>
-          <div class="row mb-3">
-            <span class="desc col-12">Платіж</span>
-            <div class="col-12 d-flex">
-              <h4 style="margin: 0;">2.000</h4>
-              <span style="margin-left: 15px;" class="status text-success">Успішно</span>
-            </div>
+          <div id="payment-modal">
+            
           </div>
-          <div class="row mb-3">
-            <span class="desc col-12">Дата</span>
-            <p class="col-12" style="margin: 0;">Jun 2, 2022 9:22 PM</p>
-          </div>
-          <div class="row mb-3">
-            <span class="desc col-12">Орендар</span>
-            <div class="profile-pic col-12 d-flex">
-              <div class="count-indicator">
-                <img class="img-xs rounded-circle " src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="">
-              </div>
-              <div class="profile-name" style="margin-left: 15px;">
-                <h5 class="mb-0 font-weight-normal">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
-                <span style="font-size: 15px; color: rgb(100, 100, 224);">{{ request.user.email }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <span class="desc col-12">Метод платежу</span>
-            <div class="col-12 d-flex align-items-center">
-              <img src="{% static 'assets/images/mastercard-svgrepo-com.svg' %}" alt="" title="Master Card">
-              <!-- <img src="{% static 'assets/images/visa-svgrepo-com.svg' %}" alt="" title="VISA"> -->
-              <p style="margin: 0 15px;">**** **** **** 4352</p>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <span class="desc col-12">Вид платежу</span>
-            <div class="col-12 d-flex">
-              <p>Місячна оплата</p>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <span class="desc col-12">Опис</span>
-            <div class="col-12 d-flex">
-              <p>lkdnfljdsljbn dlsnbgljdbljdsb ldsbgljdsbgljjsdb dslgbldsjbgljdsfbg dslgbdsjlbg</p>
-            </div>
-          </div>
+
         </div>
 
       </div>
     </div>
     
   </div>
+  <!-- end payment modal -->
 
 
   <!-- container-scroller -->
