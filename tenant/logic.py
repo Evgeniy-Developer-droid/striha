@@ -29,6 +29,6 @@ def create_contract(request):
                     contract=contract
                 )
                 index += 1
-        return True, "Success"
+        return True, contract.key
     except RealEstate.DoesNotExist:
         return False, "Failed"

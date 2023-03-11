@@ -74,11 +74,8 @@ def delete_request_media(request):
 
 @csrf_exempt
 def get_contract_status_tenant(request):
-    contract = Contract.objects.filter(tenant=request.user).exclude(status__in=["terminated"]).order_by('-created')
-    if contract.exists():
-        contract = contract.first()
-        return JsonResponse({"status": contract.status})
-    return JsonResponse({"status": "None"})
+    contract = Contract.objects.get(tenant=request.user, key=request.GET.get('key'))
+    return JsonResponse({"status": contract.status})
 
 
 @csrf_exempt

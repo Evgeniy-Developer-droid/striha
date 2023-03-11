@@ -49,6 +49,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title">{{ contract.real_estate.title }}</h4>
                                     <input type="hidden" id="now_status" name="status" value="{{ contract.status }}">
+                                    <input type="hidden" id="key" name="key" value="{{ contract.key }}">
                                     {% if contract.status == "pending_landlord" %}
                                         <div class="prl-container ">
         
@@ -111,6 +112,7 @@
     <!-- <script src="{% static 'assets/js/dashboard.js' %}"></script> -->
     <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'assets/js/steps_contract.js' %}"></script>
+    <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
     <!-- End custom js for this page -->
 
 </body>

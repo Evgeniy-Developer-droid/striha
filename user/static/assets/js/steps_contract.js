@@ -3,7 +3,8 @@ jQuery(document).ready(function ($) {
 
     
     let check_status = setInterval(()=>{
-        fetch(urls.contract_check_status, {
+        let key = $("#key").val();
+        fetch(urls.contract_check_status+"?key="+key, {
             method: "GET",
         })
         .then((response) => response.json())

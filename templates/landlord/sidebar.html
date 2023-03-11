@@ -16,11 +16,7 @@
             <div class="profile-name">
               <h5 class="mb-0 font-weight-normal">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
               <span>
-                {% if request.user.role == 'landlord' %}
                   орендодавець
-                {% else %}
-                  орендар
-                {% endif %}
               </span>
             </div>
           </div>

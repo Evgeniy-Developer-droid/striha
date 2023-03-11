@@ -372,9 +372,12 @@ class RealEstateContractSingle(LoginRequiredMixin, LandlordContentOnlyMixin, Vie
     def get(self, request, key):
         try:
             queryset = Contract.objects.get(key=key, landlord=request.user)
+            last_transactions = Transaction.objects.filter(contract=queryset, 
+                                                           landlord=request.user).order_by('-created')[:10]
             return render(request, self.template_name, {
                 "title": "Overview Real Estate",
                 "data": queryset,
+                "last_transactions": last_transactions
             })
         except Contract.DoesNotExist:
             return render(request, self.template_name, {

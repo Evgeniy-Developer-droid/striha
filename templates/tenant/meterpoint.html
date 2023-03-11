@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      {% include './sidebar.html' %}
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        {% include './navbar.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+
+          <div class="content-wrapper">
+            <div class="row mb-3">
+                <div class="col">
+                    <button class="btn btn-primary" id="new-transaction-btn" data-bs-toggle="modal" data-bs-target="#newMeterPoint">+ Додати</button>
+                </div>
+            </div>
+            {% for group in groups_meters %}
+            <div class="row ">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">{{ group.title }}</h4>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+                      {% for item in group.data %}
+                      <div class="col meter-item">
+                        <div class="card shadow-sm">
+                          <div class="meter-bg m-2" style="background-image: url('{{ item.image.url }}');"></div>
+                          <div class="card-body">
+                            <p class="card-text">{{item.other}}</p>
+                            <div class="row">
+                              <div class="col">
+                                <span class="text-primary"><b>{{item.name}}</b></span>
+                              </div>
+                              <div class="col">
+                                <span><u>{{item.value}}</u></span>
+                              </div>
+                            </div>
+                            <hr class="border border-primary border-3 opacity-75">
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div></div>
+                              <small class="text-muted">{{item.created}}</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            
+
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+
+    <!-- Modal New transaction-->
+    <div class="modal fade" id="newMeterPoint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="" method="post"  enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="modal-header">
+                  <h3 class="modal-title fs-5" id="exampleModalLabel">Показання лічильника</h3>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group">
+                      <label for="image">Фото</label>
+                      <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="period_month">Місяць</label>
+                      <div class="input-group">
+                        <select class="form-control" name="period_month" id="period_month" required>
+                          <option value="">Оберіть місяць</option>
+                          <option value="january">Січень</option>
+                          <option value="february">Лютий</option>
+                          <option value="march">Березень</option>
+                          <option value="april">Квітень</option>
+                          <option value="may">Травень</option>
+                          <option value="june">Червень</option>
+                          <option value="july">Липень</option>
+                          <option value="august">Серпень</option>
+                          <option value="september">Вересень</option>
+                          <option value="october">Жовтень</option>
+                          <option value="november">Листопад</option>
+                          <option value="december">Грудень</option>
+                        </select>
+                        <div class="input-group-append">
+                          <button class="btn  btn-primary" type="button" disabled>2023</button>
+                        </div>
+                      </div>
+                      
+                  </div>
+                  <div class="form-group">
+                      <label for="name">Назва</label>
+                      <input type="text" maxlength="50" class="form-control" id="name" name="name" placeholder="Водопостачання" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="value">Значення</label>
+                      <input type="text" class="form-control" maxlength="50" id="value" name="value" placeholder="001234" required>
+                  </div>
+                  <div class="form-group row">
+                      <div class="col">
+                        <textarea class="form-control" maxlength="100" placeholder="Додаткова інформація" name="other" id="exampleTextarea1" rows="8"></textarea>
+                      </div>
+                    </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                  <button type="submit" class="btn btn-success">Додати</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %}"></script>
+    <script src="{% static 'assets/js/settings.js' %}"></script>
+    <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

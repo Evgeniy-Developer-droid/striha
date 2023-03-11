@@ -32,71 +32,55 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-
-            {% if not contract %}
-            <div class="banner">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-5">
-                    <h1 class="display-4 fw-bold">Привіт!</h1>
-                    <p>Ми раді вітати вас на нашому сайті. На разі у вас не має жодного активного контракту</p>
-                    <a href="{% url 'new-contract-tenant' %}" class="btn btn-outline-success">Створити контракт</a>
-                  </div>
-                  <div class="col-sm-7">
-                    <img class="img-fluid" src="{% static 'assets/images/dashboard/img_4.jpg' %}" alt="">
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% else %}
-
-            
-
-              {% if transactions.count != 0 %}
           
-              <div class="row ">
-                <div class="col-12 grid-margin">
-                  <div class="card">
+            <div class="row ">
+                
+                {% for contract in contracts %}
+                <div class="col-lg-4 col-md-6 col-sm-12 grid-margin">
+                  <div class="card single-card-hover-effect">
                     <div class="card-body">
-                      <h4 class="card-title">Останні платежі</h4>
-                      <div class="table-responsive">
-                        <table class="table">
-                          <thead>
-                            <tr>
-                              <th> Ключ </th>
-                              <th> Кошти </th>
-                              <th> Дата </th>
-                              <th> Статус </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for transaction in transactions %}
-                            <tr>
-                              <td> {{ transaction.key }} </td>
-                              <td> {{ transaction.amount }} </td>
-                              <td> {{ transaction.created }} </td>
-                              <td>
-                                {% if transaction.status == "success" %}
-                                <div class="btn btn-inverse-success btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Успішно</div>
-                                {% elif transaction.status == "pending" %}
-                                <div class="btn btn-inverse-warning btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Очікування</div>
-                                {% else %}
-                                <div class="btn btn-inverse-danger btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Невдача</div>
-                                {% endif %}
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
+                      <a href="{% url 'single-meterpoint-tenant' contract.key %}">{{contract.real_estate.title}}</a>
+                      <div class="row">
+    
+                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                          <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h5 class="mb-0 mr-1">
+                              UAN {{ contract.real_estate.price_month }}
+                            </h5>
+                            {% if contract.status == "active" %}
+                            <div class="badge badge-outline-success">Активний</div>
+                            {% elif contract.status == "pending_landlord" %}
+                            <div class="badge badge-outline-secondary">Очікує</div>
+                            {% elif contract.status == "terminated" %}
+                            <div class="badge badge-outline-info">Скасовано</div>
+                            {% else %}
+                            <div class="badge badge-outline-danger">Відмовлено</div>
+                            {% endif %}
+                          </div>
+                          <hr class="border border-primary border-3 opacity-75">
+                          <div class="dh-addition">
+                            <img class="img-xs rounded-circle" src="{% if contract.landlord.avatar %}{{ contract.landlord.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="">
+                            <span class="ml-2">{{contract.landlord.first_name}} {{contract.landlord.last_name}}</span>
+                          </div>
+                        </div>
+    
+                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                          {% if contract.real_estate.real_estate_media.all.0 %}
+                          <div class="thumb-dash"
+                            style="background-image: url('{{ contract.real_estate.real_estate_media.all.0.file.url }}');"></div>
+                          {% else %}
+                          <div class="thumb-dash"
+                            style="background-image: url('{% static 'assets/images/dashboard/empty.png' %}');"></div>
+                          {% endif %}
+                        </div>
+    
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              
-              {% endif %}
-            
-            {% endif %}
+                {% endfor %}
+    
+                </div>
 
           </div>
           <!-- content-wrapper ends -->
@@ -113,31 +97,6 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-
-        <!-- payment modal -->
-        <script>const url_get_payment_data = "{% url 'payment-single-get' %}";</script>
-        <div class="payment-preview" style="display: none;">
-    
-          <div class="container">
-            <div class="row justify-content-center">
-    
-              <div class="col-lg-4 col-md-6 col-sm-12 mt-5 payment-wrap">
-                <div class="close-btn-pay"><i class="mdi mdi-close text-light"></i></div>
-                <div class="row">
-                  <h3>Деталі платежу</h3>
-                </div>
-                <div id="payment-modal">
-                  
-                </div>
-    
-              </div>
-    
-            </div>
-          </div>
-          
-        </div>
-        <!-- end payment modal -->
-    
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
@@ -159,7 +118,6 @@
     <!-- Custom js for this page -->
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
     <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
-    <script src="{% static 'assets/js-custom/payments.js'  %}" ></script>
     <!-- End custom js for this page -->
   </body>
 </html>

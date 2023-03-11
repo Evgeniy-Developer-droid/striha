@@ -82,7 +82,7 @@
 
                           <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                              <button class="nav-link active" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions-tab-pane" type="button" role="tab" aria-controls="transactions-tab-pane" aria-selected="true">Платежі</button>
+                              <button class="nav-link active" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions-tab-pane" type="button" role="tab" aria-controls="transactions-tab-pane" aria-selected="true">Останні платежі</button>
                             </li>
                             <li class="nav-item" role="presentation">
                               <button class="nav-link" id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-pane" type="button" role="tab" aria-controls="general-tab-pane" aria-selected="true">Основне</button>
@@ -92,69 +92,29 @@
                             <div class="tab-pane fade show active" id="transactions-tab-pane" role="tabpanel" aria-labelledby="transactions-tab" tabindex="0">
                               <div class="preview-list">
 
-                                <div class="preview-item border-bottom">
-                                  <div class="preview-thumbnail">
-                                    <img src="{% if data.tenant.avatar %}{{ data.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="image" class="rounded-circle">
-                                  </div>
-                                  <div class="preview-item-content d-flex flex-grow">
-                                    <div class="flex-grow">
-                                      <div class="d-flex justify-content-between text-center">
-                                        <h6 class="preview-subject">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</h6>
-                                        <span>UAN 2000</span>
-                                        <span>Month Pay</span>
-                                        <div class="badge badge-outline-danger">Rejected</div>
+                                {% for transaction in last_transactions %}
+                                  <div class="preview-item border-bottom">
+                                    <div class="preview-thumbnail">
+                                      <img src="{% if transaction.tenant.avatar %}{{ transaction.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="image" class="rounded-circle">
+                                    </div>
+                                    <div class="preview-item-content d-flex flex-grow">
+                                      <div class="flex-grow">
+                                        <div class="d-flex justify-content-between text-center">
+                                          <h6 class="preview-subject">{{ transaction.tenant.first_name }} {{ transaction.tenant.last_name }}</h6>
+                                          <span>UAN {{ transaction.amount }}</span>
+                                          <span>{{ transaction.created }}</span>
+                                          {% if transaction.status == "success" %}
+                                          <div class="btn btn-inverse-success btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Успішно</div>
+                                          {% elif transaction.status == "pending" %}
+                                          <div class="btn btn-inverse-warning btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Очікування</div>
+                                          {% else %}
+                                          <div class="btn btn-inverse-danger btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Невдача</div>
+                                          {% endif %}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-
-                                <div class="preview-item border-bottom">
-                                  <div class="preview-thumbnail">
-                                    <img src="{% if data.tenant.avatar %}{{ data.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="image" class="rounded-circle">
-                                  </div>
-                                  <div class="preview-item-content d-flex flex-grow">
-                                    <div class="flex-grow">
-                                      <div class="d-flex justify-content-between text-center">
-                                        <h6 class="preview-subject">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</h6>
-                                        <span>UAN 2000</span>
-                                        <span>Month Pay</span>
-                                        <div class="badge badge-outline-danger">Rejected</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="preview-item border-bottom">
-                                  <div class="preview-thumbnail">
-                                    <img src="{% if data.tenant.avatar %}{{ data.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="image" class="rounded-circle">
-                                  </div>
-                                  <div class="preview-item-content d-flex flex-grow">
-                                    <div class="flex-grow">
-                                      <div class="d-flex justify-content-between text-center">
-                                        <h6 class="preview-subject">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</h6>
-                                        <span>UAN 2000</span>
-                                        <span>Month Pay</span>
-                                        <div class="badge badge-outline-warning">Pending</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="preview-item border-bottom">
-                                  <div class="preview-thumbnail">
-                                    <img src="{% if data.tenant.avatar %}{{ data.tenant.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}" alt="image" class="rounded-circle">
-                                  </div>
-                                  <div class="preview-item-content d-flex flex-grow">
-                                    <div class="flex-grow">
-                                      <div class="d-flex justify-content-between text-center">
-                                        <h6 class="preview-subject">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</h6>
-                                        <span>UAN 4000</span>
-                                        <span>Security Pay</span>
-                                        <div class="badge badge-outline-success">Success</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                {% endfor %}
 
                               </div>
                             </div>
@@ -342,6 +302,32 @@
       <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+
+      <!-- payment modal -->
+      <script>const url_get_payment_data = "{% url 'payment-single-get' %}";</script>
+      <div class="payment-preview" style="display: none;">
+
+        <div class="container">
+          <div class="row justify-content-center">
+
+            <div class="col-lg-4 col-md-6 col-sm-12 mt-5 payment-wrap">
+              <div class="close-btn-pay"><i class="mdi mdi-close text-light"></i></div>
+              <div class="row">
+                <h3>Деталі платежу</h3>
+              </div>
+              <div id="payment-modal">
+                
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        
+      </div>
+      <!-- end payment modal -->
+
+
     <!-- plugins:js -->
     <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
     <!-- endinject -->
@@ -363,6 +349,7 @@
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
+    <script src="{% static 'assets/js-custom/payments.js'  %}" ></script>
     <!-- End custom js for this page -->
   </body>
 </html>

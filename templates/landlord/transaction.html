@@ -76,11 +76,11 @@
                               <td> {{ transaction.created }} </td>
                               <td>
                                 {% if transaction.status == "success" %}
-                                <div class="btn btn-inverse-success btn-fw d-inline">Успішно</div>
+                                <div class="btn btn-inverse-success btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Успішно</div>
                                 {% elif transaction.status == "pending" %}
-                                <div class="btn btn-inverse-warning btn-fw d-inline">Очікування</div>
+                                <div class="btn btn-inverse-warning btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Очікування</div>
                                 {% else %}
-                                <div class="btn btn-inverse-danger btn-fw d-inline">Невдача</div>
+                                <div class="btn btn-inverse-danger btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Невдача</div>
                                 {% endif %}
                               </td>
                             </tr>
@@ -109,6 +109,30 @@
       <!-- page-body-wrapper ends -->
     </div>
 
+
+    <!-- payment modal -->
+    <script>const url_get_payment_data = "{% url 'payment-single-get' %}";</script>
+    <div class="payment-preview" style="display: none;">
+
+      <div class="container">
+        <div class="row justify-content-center">
+
+          <div class="col-lg-4 col-md-6 col-sm-12 mt-5 payment-wrap">
+            <div class="close-btn-pay"><i class="mdi mdi-close text-light"></i></div>
+            <div class="row">
+              <h3>Деталі платежу</h3>
+            </div>
+            <div id="payment-modal">
+              
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+    <!-- end payment modal -->
 
     <!-- Modal New transaction-->
     <div class="modal fade" id="newTransactionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -175,6 +199,7 @@
     <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'assets/js-custom/l-transaction.js' %}"></script>
     <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
+    <script src="{% static 'assets/js-custom/payments.js'  %}" ></script>
     <!-- End custom js for this page -->
   </body>
 </html>
