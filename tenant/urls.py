@@ -19,5 +19,7 @@ urlpatterns = [
     path('requests/add', RequestsAddView.as_view(), name="add-requests-tenant"),
     path('requests/<str:key>', RequestsByRealEstateView.as_view(), name="requests-by-real-estate-tenant"),
 
+    path('settings', SettingsView.as_view(), name="settings-tenant"),
+
     path('notifications', NotificationsView.as_view(), name="notifications-tenant"),
 ]

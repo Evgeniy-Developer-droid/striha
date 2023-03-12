@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Corona Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+
+  <script>
+    const urls = {
+      "change_avatar_url": "{% url 'change-avatar' %}"
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container-scroller">
+    {% include './sidebar.html' %}
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_navbar.html -->
+      {% include './navbar.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+
+        <div class="content-wrapper">
+            {% if request.GET.success %}
+              <div class="message message-success" role="alert">
+                <p>{{request.GET.success}}</p>
+              </div>
+            {% endif %}
+            {% if request.GET.error %}
+              <div class="message message-danger" role="alert">
+                <p>{{request.GET.error}}</p>
+              </div>
+            {% endif %}
+            {% if request.GET.info %}
+              <div class="message message-info" role="alert">
+                <p>{{request.GET.info}}</p>
+              </div>
+            {% endif %}
+            {% if request.GET.warning %}
+              <div class="message message-warning" role="alert">
+                <p>{{request.GET.warning}}</p>
+              </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Налаштуваня</h4>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-center mb-3">
+                                        <div class="image-avatar-change" style="background-image: url('{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static 'assets/images/faces/face0.jpg' %}{% endif %}');"></div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <input type="file" name="avatar" id="avatar-input" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <form class="forms-sample" autocomplete="off" action="" method="post">
+                                    <p class="card-description"> Основна інформація </p>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="summary">
+                                    <div class="form-group">
+                                      <label for="first_name">Ім'я</label>
+                                      <input type="text" class="form-control" value="{{request.user.first_name}}" id="first_name" name="first_name" placeholder="Ім'я">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last_name">Прізвище</label>
+                                        <input type="text" class="form-control" value="{{request.user.last_name}}" id="last_name" name="last_name" placeholder="Прізвище">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Телефон</label>
+                                        <input type="text" class="form-control" value="{{request.user.phone}}" id="phone" name="phone" placeholder="38000000000">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Оновити</button>
+                                </form>
+                                <hr class="border border-secondary my-4 border-3 opacity-50">
+                                <form class="forms-sample" autocomplete="off" action="" method="post">
+                                    <p class="card-description"> Зміна паролю </p>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="password">
+                                    <div class="form-group">
+                                        <label for="old-pass">Старий пароль</label>
+                                        <input type="password" class="form-control" id="old-pass" name="old-pass" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="new-pass">Новий пароль</label>
+                                      <input type="password" class="form-control" id="new-pass" name="new-pass" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="rep-pass">Повторіть новий пароль</label>
+                                      <input type="password" class="form-control" id="rep-pass" name="rep-pass" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Змінити пароль</button>
+                                </form>
+                            </div>
+                        </div>
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com
+            2020</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+              href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin
+              templates</a> from Bootstrapdash.com</span>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+  <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
+  <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+  <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+  <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+  <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'assets/js/misc.js' %}"></script>
+  <script src="{% static 'assets/js/settings.js' %}"></script>
+  <script src="{% static 'assets/js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page -->
+  <script src="{% static 'assets/js/dashboard.js' %}"></script>
+  <script src="{% static 'assets/js-custom/settings.js' %}"></script>
+  <script src="{% static 'assets/js-custom/notifications.js'  %}" ></script>
+  <!-- End custom js for this page -->
+</body>
+
+</html>
