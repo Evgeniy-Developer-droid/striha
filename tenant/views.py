@@ -1,5 +1,6 @@
 import datetime
 import json
+from django.utils import timezone
 from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +13,19 @@ from django.contrib.auth import update_session_auth_hash, authenticate
 
 from user.mixins import TenantContentOnlyMixin
 from user.models import Notification, User
+
+
+class TerminateContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+
+    def get(self, request, key):
+        now = timezone.now()
+        queryset = Contract.objects.get(key=key, tenant=request.user)
+        queryset.status = "terminated"
+        queryset.terminated_date = now
+        queryset.save()
+        return redirect(reverse("contracts-tenant")+"?success=Контракт успішно розірвано")
+
 
 
 class SettingsView(LoginRequiredMixin, TenantContentOnlyMixin, View):

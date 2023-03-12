@@ -57,6 +57,7 @@ class Contract(models.Model):
         ("terminated", "Terminated"),
     )
     created = models.DateTimeField(auto_now_add=True)
+    terminated_date = models.DateTimeField(null=True, blank=True)
     key = models.UUIDField(default=uuid.uuid4, editable=False)
     status = models.CharField(max_length=255, choices=STATUS, default="pending_landlord")
     tenant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contract_tenant")
@@ -110,6 +111,7 @@ class Transaction(models.Model):
     STATUS = (
         ('failed', 'Failed',),
         ('success', 'Success',),
+        ('processing', 'Processing',),
         ('pending', 'Pending',),
     )
     MODE = (

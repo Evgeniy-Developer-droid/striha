@@ -27,6 +27,8 @@ urlpatterns = [
     path('contracts', RealEstateContracts.as_view(), name="contracts-landlord"),
     path('contracts/<str:key>', RealEstateContractSingle.as_view(), name="single-contract-landlord"),
 
+    path('terminate/<str:key>', TerminateContractView.as_view(), name="terminate-landlord"),
+
     path('contract/approve/<int:pk>', RealEstateContractApprove.as_view(), name="approve-contract-landlord"),
     path('contract/decline/<int:pk>', RealEstateContractDecline.as_view(), name="decline-contract-landlord"),
 

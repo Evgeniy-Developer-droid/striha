@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,14 +14,17 @@ from .forms import NewTransactionForm
 
 from user.mixins import LandlordContentOnlyMixin
 
-# class StatisticView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
-#     login_url = reverse_lazy('login')
-#     template_name = 'landlord/statistics.html'
 
-#     def get(self, request):
-#         return render(request, self.template_name, {
-#             "title": "Overview Real Estate",
-#         })
+class TerminateContractView(LoginRequiredMixin, LandlordContentOnlyMixin, View):
+    login_url = reverse_lazy('login')
+
+    def get(self, request, key):
+        now = timezone.now()
+        queryset = Contract.objects.get(key=key, landlord=request.user)
+        queryset.status = "terminated"
+        queryset.terminated_date = now
+        queryset.save()
+        return redirect(reverse("contracts-landlord")+"?success=Контракт успішно розірвано")
 
 
 class NotificationsView(LoginRequiredMixin, LandlordContentOnlyMixin, View):

@@ -49,7 +49,7 @@
                                     <i class="mdi mdi-coin btn-icon-prepend"></i> Створити платіж </button>
                               </div>
                               <div class="action-terminate-contract-wrap">
-                                <button type="button" class="btn btn-outline-danger btn-icon-text">
+                                <button data-bs-toggle="modal" data-bs-target="#terminatedModal" class="btn btn-outline-danger btn-icon-text">
                                   <i class="mdi mdi-block-helper btn-icon-prepend"></i> Розірвати угоду</button>
                               </div>
                             </div>
@@ -129,7 +129,8 @@
                                   <div class="preview-item-content d-flex flex-grow">
                                     <div class="flex-grow">
                                       <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                        <h6 class="preview-subject">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</h6>
+                                        <a href="{% url 'user-public' data.tenant.key %}" 
+                                        class="preview-subject h6">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</a>
                                         <p class="text-muted text-small">орендар</p>
                                       </div>
                                       <div class="row">
@@ -224,7 +225,8 @@
                                       <div class="preview-item-content d-flex flex-grow">
                                         <div class="flex-grow">
                                           <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                            <h6 class="preview-subject">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</h6>
+                                            <a href="{% url 'user-public' data.tenant.key %}" 
+                                            class="preview-subject h6">{{ data.tenant.first_name }} {{ data.tenant.last_name }}</a>
                                             <p class="text-muted text-small">орендар</p>
                                           </div>
                                           <div class="row">
@@ -268,12 +270,10 @@
                                 {% elif data.status == 'declined' %}
                                   <blockquote class="blockquote blockquote-danger">
                                     <h4>Контракт відхилений</h4>
-                                    {% comment %} <footer class="blockquote-footer"></footer> {% endcomment %}
                                   </blockquote>
                                 {% elif data.status == 'terminated' %}
                                 <blockquote class="blockquote blockquote-info">
-                                  <h4>Угоду розірвано</h4>
-                                  {% comment %} <footer class="blockquote-footer"></footer> {% endcomment %}
+                                  <h4>Контракт розірвано {{ data.terminated_date }}</h4>
                                 </blockquote>
                                 {% endif %}
                               </div>
@@ -326,6 +326,25 @@
         
       </div>
       <!-- end payment modal -->
+
+
+      <!-- Modal -->
+     <div class="modal fade" id="terminatedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Ви впевнені, що хочете розірвати контракт?</h3>
+            </div>
+            <!-- <div class="modal-body">
+              <p class="text-light">Are you sure?</p>
+            </div> -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+              <a href="{% url 'terminate-landlord' data.key %}" type="button" class="btn btn-danger">Розірвати</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
     <!-- plugins:js -->
