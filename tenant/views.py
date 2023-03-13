@@ -299,7 +299,7 @@ class NewContractView(LoginRequiredMixin, TenantContentOnlyMixin, View):
         if request.POST.get("action", "") == "create_contract":
             res = create_contract(request)
             if res[0]:
-                return redirect(reverse("steps-contract-tenant"))
+                return redirect(reverse("single-contract-tenant", args=(res[1],)))
             return render(request, self.template_name, {"error": res[1]})
 
 
