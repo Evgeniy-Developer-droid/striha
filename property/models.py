@@ -179,3 +179,10 @@ class NotionMedia(models.Model):
     key = models.UUIDField(default=uuid.uuid4, editable=False)
     notion = models.ForeignKey(Request, on_delete=models.CASCADE, related_name="notion_media")
     file = models.ImageField(upload_to='notion_media', null=True, blank=True)
+
+
+class PaymentToken(models.Model):  # тимчасовий токен
+    created = models.DateTimeField(auto_now_add=True)
+    key = models.UUIDField(default=uuid.uuid4, editable=False)
+    token = models.CharField(max_length=255, default="", null=True)
+    meta = models.TextField(default="{}", blank=True)

@@ -4,34 +4,30 @@ from liqpay.liqpay3 import LiqPay
 from django.urls import reverse
 import secrets
 
-from property.models import Transaction
+from property.models import Transaction, PaymentToken
 
 
-def payment_data_generate(contract):
+def pay_link_generate(transaction):
     liqpay = LiqPay(settings.LIQPAY_PUBLIC, settings.LIQPAY_SECRET)
-    token_order = secrets.token_hex(16)
+    token = secrets.token_hex(20)
     params = {
         'action': 'pay',
         'currency': 'UAH',
-        'order_id': token_order,
+        'order_id': token,
         'version': '3',
-        'amount': 12,
-        'description': "s",
+        'amount': transaction.amount,
+        'description': transaction.description,
         'sandbox': 0, # sandbox mode, set to 1 to enable it
-        'server_url':  settings.SITE_URL + reverse("callback-contract-pay-steps")
+        'server_url':  settings.SITE_URL + reverse("pay_callback")
     }
-
-    Transaction.objects.create(
-        tenant=contract.tenant,
-        landlord=contract.landlord,
-        amount=params['amount'],
-        order_id=token_order,
-        name=params['description'],
-        meta=json.dumps({
-            "contract": contract.pk,
-            "mode": contract.status
-        })
-    )
     signature = liqpay.cnb_signature(params)
     data = liqpay.cnb_data(params)
-    return {"signature": signature, "data": data}
+    PaymentToken.objects.create(
+        token=token,
+        meta=json.dumps({
+            "action": "transaction_pay",
+            "key": str(transaction.key)
+        })
+    )
+    link = f"https://www.liqpay.ua/api/3/checkout?data={data}&signature={signature}"
+    return link

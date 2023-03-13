@@ -35,6 +35,6 @@ jQuery(document).ready(function ($) {
         })
         .catch((error)=> console.log(error));
 
-    }, 3000)
+    }, 6000)
 
 })

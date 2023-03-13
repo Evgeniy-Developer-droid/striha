@@ -1,4 +1,6 @@
 from django.http import HttpResponseBadRequest, JsonResponse, Http404
+
+from property.payment import pay_link_generate
 from .models import Contract, RealEstate, RealEstateMedia, RequestMedia, Transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
@@ -26,6 +28,11 @@ def payment_single_data(request):
         result['role'] = "Орендодавець"
         result['email'] = instance.landlord.email
         result['full_name'] = f'{instance.landlord.first_name} {instance.landlord.last_name}'
+        if instance.status in ["pending", "failed"]:
+            try:
+                result['pay_url'] = pay_link_generate(instance)
+            except Exception as e:
+                print(e)
     result['amount'] = instance.amount
     result['card'] = instance.card_mask
     result['created'] = instance.created.strftime("%d/%m/%Y, %H:%M:%S")
@@ -41,6 +48,8 @@ def payment_single_data(request):
         result['status'] = "Успішно"
     elif instance.status == "failed":
         result['status'] = "Невдача"
+    elif instance.status == "processing":
+        result['status'] = "В обробці"
     else:
         result['status'] = "Очікування"
     return JsonResponse(result)

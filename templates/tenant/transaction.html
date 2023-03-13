@@ -74,6 +74,8 @@
                                 <div class="btn btn-inverse-success btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Успішно</div>
                                 {% elif transaction.status == "pending" %}
                                 <div class="btn btn-inverse-warning btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Очікування</div>
+                                {% elif transaction.status == "processing" %}
+                                <div class="btn btn-inverse-info btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">В обробці</div>
                                 {% else %}
                                 <div class="btn btn-inverse-danger btn-fw d-inline pay-btn-info" data-key="{{ transaction.key }}">Невдача</div>
                                 {% endif %}
